@@ -1,6 +1,8 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 import co.edu.uniquindio.sistemagestionhospital.Controller.HospitalController;
-import java.util.LinkedList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Administrador extends Usuario {
 
@@ -35,24 +37,30 @@ public class Administrador extends Usuario {
         return false;
     }
 
-    public LinkedList<Cita> verDisponibilidadMedico(Medico medico) {
+    public List<Cita> verDisponibilidadMedico(Medico medico) {
         return medico.getCitas();
     }
 
 
-    public void asignarCita(HospitalController controller, Cita cita) {
+    public boolean asignarCita(HospitalController controller, Cita cita) {
+        if (controller.getCitas().contains(cita)) return false;
+
         controller.getCitas().add(cita);
         cita.getPaciente().agregarCita(cita);
         cita.getMedico().agregarCita(cita);
+        return true;
     }
 
 
-    public void generarReporteCitas(HospitalController controller) {
-        System.out.println("----- Reporte de Citas -----");
+
+    public List<String> generarReporteCitas(HospitalController controller) {
+        List<String> reporte = new ArrayList<>();
         for (Cita cita : controller.getCitas()) {
-            System.out.println(cita);
+            reporte.add(cita.toString());
         }
+        return reporte;
     }
+
 
     public long calcularOcupacion(HospitalController controller) {
         return controller.getCitas().stream()

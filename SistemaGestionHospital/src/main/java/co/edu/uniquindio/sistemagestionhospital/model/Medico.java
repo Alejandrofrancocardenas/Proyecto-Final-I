@@ -1,23 +1,23 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 
 public class Medico extends Usuario implements Notificable {
 
     private String especialidad;
-    private LinkedList<Cita> citas;
-    private LinkedList<String> notificaciones;
+    private ArrayList<Cita> citas;
+    private ArrayList<String> notificaciones;
 
-    public Medico(String id,String nombre, String correo, String contrasena, String especialidad) {
-        super(nombre, id,correo, contrasena);
+    public Medico(String id, String nombre, String correo, String contrasena, String especialidad) {
+        super(nombre, id, correo, contrasena);
         this.especialidad = especialidad;
-        this.citas = new LinkedList<>();
+        this.citas = new ArrayList<>();
+        this.notificaciones = new ArrayList<>();
     }
 
     @Override
     public void mostrarMenu() {
-
+        // Implementar si es necesario
     }
 
     public boolean agregarCita(Cita cita) {
@@ -28,7 +28,6 @@ public class Medico extends Usuario implements Notificable {
         return true;
     }
 
-
     public boolean cancelarCita(Cita cita) {
         if (citas.contains(cita)) {
             cita.cancelar();
@@ -36,6 +35,7 @@ public class Medico extends Usuario implements Notificable {
         }
         return false;
     }
+
     public boolean registrarHistorialMedico(Cita cita, String diagnostico, String tratamiento) {
         if (!citas.contains(cita)) {
             return false;
@@ -55,7 +55,7 @@ public class Medico extends Usuario implements Notificable {
         }
     }
 
-    public LinkedList<Cita> getCitas() {
+    public ArrayList<Cita> getCitas() {
         return citas;
     }
 
@@ -69,6 +69,10 @@ public class Medico extends Usuario implements Notificable {
 
     @Override
     public void recibirNotificacion(String mensaje) {
-       notificaciones.add(mensaje);
+        notificaciones.add(mensaje);
+    }
+
+    public ArrayList<String> getNotificaciones() {
+        return notificaciones;
     }
 }

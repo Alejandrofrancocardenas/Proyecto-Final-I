@@ -1,25 +1,20 @@
 package co.edu.uniquindio.sistemagestionhospital.Controller;
 
-import co.edu.uniquindio.sistemagestionhospital.model.Cita;
-import co.edu.uniquindio.sistemagestionhospital.model.Medico;
-import co.edu.uniquindio.sistemagestionhospital.model.Paciente;
+import co.edu.uniquindio.sistemagestionhospital.model.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class HospitalController {
 
-    private LinkedList<Paciente> pacientes;
-    private LinkedList<Medico> medicos;
-    private LinkedList<Cita> citas;
+    private final ArrayList<Paciente> pacientes;
+    private final ArrayList<Medico> medicos;
+    private final ArrayList<Cita> citas;
 
     public HospitalController() {
-        pacientes = new LinkedList<>();
-        medicos = new LinkedList<>();
-        citas = new LinkedList<>();
+        this.pacientes = new ArrayList<>();
+        this.medicos = new ArrayList<>();
+        this.citas = new ArrayList<>();
     }
-
 
     public void registrarPaciente(Paciente paciente) {
         pacientes.add(paciente);
@@ -29,61 +24,46 @@ public class HospitalController {
         medicos.add(medico);
     }
 
-    public void registrarCita(Cita cita) {
+    public boolean eliminarPaciente(String correo) {
+        return pacientes.removeIf(p -> p.getCorreo().equals(correo));
+    }
+
+    public boolean eliminarMedico(String correo) {
+        return medicos.removeIf(m -> m.getCorreo().equals(correo));
+    }
+
+    public ArrayList<Cita> verDisponibilidadMedico(Medico medico) {
+        return new ArrayList<>(medico.getCitas());
+    }
+
+    public void asignarCita(Cita cita) {
         citas.add(cita);
         cita.getPaciente().agregarCita(cita);
         cita.getMedico().agregarCita(cita);
     }
 
-    public Paciente buscarPacientePorCorreo(String correo) {
-        for (Paciente p : pacientes) {
-            if (p.getCorreo().equalsIgnoreCase(correo)) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    public Medico buscarMedicoPorCorreo(String correo) {
-        for (Medico m : medicos) {
-            if (m.getCorreo().equalsIgnoreCase(correo)) {
-                return m;
-            }
-        }
-        return null;
-    }
-
-    public boolean agendarCita(Paciente paciente, Medico medico, LocalDate fecha, LocalTime hora) {
-        for (Cita c : citas) {
-            if (c.getMedico().equals(medico) && c.getFecha().equals(fecha)) {
-                return false;
-            }
-
-        }
-
-        Cita nuevaCita = new Cita(paciente, medico, fecha,hora);
-        citas.add(nuevaCita);
-        paciente.getCitas().add(nuevaCita);
-        medico.getCitas().add(nuevaCita);
-
-        paciente.recibirNotificacion("Se ha agendado su cita con el Dr. " + paciente.getNombre() + " para el " + fecha.toString());
-        medico.recibirNotificacion("Nueva cita agendada con el paciente " + medico.getNombre() + " para el " + fecha);
-
-        return true;
-    }
-
-
-
-
-        public LinkedList<Paciente> getPacientes () {
-            return pacientes;
-        }
-
-        public LinkedList<Medico> getMedicos () {
-            return medicos;
-        }
-
-        public LinkedList<Cita> getCitas () {
-            return citas;
+    public void generarReporteCitas() {
+        System.out.println("===== Reporte de Citas =====");
+        for (Cita cita : citas) {
+            System.out.println(cita);
         }
     }
+
+    public long calcularOcupacion() {
+        return citas.stream()
+                .filter(cita -> cita.getEstado() == EstadoCita.AGENDADA)
+                .count();
+    }
+
+    public ArrayList<Paciente> getPacientes() {
+        return pacientes;
+    }
+
+    public ArrayList<Medico> getMedicos() {
+        return medicos;
+    }
+
+    public ArrayList<Cita> getCitas() {
+        return citas;
+    }
+}
