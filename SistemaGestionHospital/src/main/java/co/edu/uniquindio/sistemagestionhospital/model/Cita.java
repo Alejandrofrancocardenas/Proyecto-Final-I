@@ -12,7 +12,7 @@ public class Cita {
     private LocalDate fecha;
     private LocalTime hora;
     private EstadoCita estado;
-
+private HistorialMedico historialMedico;
     public Cita(Paciente paciente, Medico medico, LocalDate fecha, LocalTime hora) {
         this.id = UUID.randomUUID().toString();
         this.paciente = paciente;
@@ -20,6 +20,7 @@ public class Cita {
         this.fecha = fecha;
         this.hora = hora;
         this.estado = EstadoCita.AGENDADA;
+        this.historialMedico = null;
     }
 
     // Métodos
@@ -78,6 +79,12 @@ public class Cita {
 
     public void setEstado(EstadoCita estado) {
         this.estado = estado;
+    }
+    public HistorialMedico getHistorialMedico() {
+        return historialMedico;
+    }
+    public void setHistorialMedico(HistorialMedico historialMedico) {
+        this.historialMedico = historialMedico;
     }
 
     @Override

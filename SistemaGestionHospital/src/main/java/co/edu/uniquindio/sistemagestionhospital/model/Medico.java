@@ -20,14 +20,31 @@ public class Medico extends Usuario implements Notificable {
 
     }
 
-    public void agregarCita(Cita cita) {
+    public boolean agregarCita(Cita cita) {
+        if (citas.contains(cita)) {
+            return false; // Ya existe
+        }
         citas.add(cita);
+        return true;
     }
 
-    public void cancelarCita(Cita cita) {
+
+    public boolean cancelarCita(Cita cita) {
         if (citas.contains(cita)) {
             cita.cancelar();
+            return true;
         }
+        return false;
+    }
+    public boolean registrarHistorialMedico(Cita cita, String diagnostico, String tratamiento) {
+        if (!citas.contains(cita)) {
+            return false;
+        }
+
+        HistorialMedico historial = new HistorialMedico(this, cita.getPaciente(), diagnostico, tratamiento);
+        cita.setEstado(EstadoCita.COMPLETADA);
+        cita.setHistorialMedico(historial);
+        return true;
     }
 
     public void registrarDiagnostico(Cita cita, String diagnostico, String tratamiento) {
@@ -38,7 +55,7 @@ public class Medico extends Usuario implements Notificable {
         }
     }
 
-    public List<Cita> getCitas() {
+    public LinkedList<Cita> getCitas() {
         return citas;
     }
 

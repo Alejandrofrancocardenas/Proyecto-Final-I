@@ -16,13 +16,23 @@ public class Administrador extends Usuario {
     public void registrarMedico(HospitalController controller, Medico medico) {
         controller.registrarMedico(medico);
     }
-    public void eliminarPaciente(HospitalController controller, Paciente paciente) {
-        controller.getPacientes().remove(paciente);
+    public boolean eliminarPaciente(String correo, HospitalController controller) {
+        for (Paciente p : controller.getPacientes()) {
+            if (p.getCorreo().equals(correo)) {
+                controller.getPacientes().remove(p);
+                return true;
+            }
+        }
+        return false;
     }
-
-
-    public void eliminarMedico(HospitalController controller, Medico medico) {
-        controller.getMedicos().remove(medico);
+    public boolean eliminarMedico(String correo, HospitalController controller) {
+        for (Medico m : controller.getMedicos()) {
+            if (m.getCorreo().equals(correo)) {
+                controller.getMedicos().remove(m);
+                return true;
+            }
+        }
+        return false;
     }
 
     public LinkedList<Cita> verDisponibilidadMedico(Medico medico) {

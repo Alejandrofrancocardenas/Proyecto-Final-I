@@ -34,14 +34,16 @@ public class Paciente extends Usuario implements Notificable {
         recibirNotificacion("Cita solicitada para el día " + cita.getFecha());
     }
 
-    public void cancelarCita(Cita cita) {
-        if (citas.contains(cita) && cita.getEstado() == EstadoCita.AGENDADA) {
-            cita.cancelar();
-            recibirNotificacion("Cita cancelada para el día " + cita.getFecha());
+    public boolean agregarCita(Cita cita) {
+        if (citas.contains(cita)) {
+            return false;
         }
-    }
-    public void agregarCita(Cita cita) {
         citas.add(cita);
+        return true;
+    }
+    public boolean cancelarCita(Cita cita) {
+        return citas.remove(cita); // Solo si existe
+
     }
 
     public List<HistorialMedico> consultarHistorialMedico() {
