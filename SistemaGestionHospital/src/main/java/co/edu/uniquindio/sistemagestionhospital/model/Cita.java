@@ -1,59 +1,89 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.UUID;
 
 public class Cita {
 
-    private Date fecha;
+    private String id;
     private Paciente paciente;
     private Medico medico;
-    private EstadoCita estadoCita;
-    private String motivo;
+    private LocalDate fecha;
+    private LocalTime hora;
+    private EstadoCita estado;
 
-    public Cita(Date fecha, Paciente paciente, Medico medico) {
-        this.fecha = fecha;
+    public Cita(Paciente paciente, Medico medico, LocalDate fecha, LocalTime hora) {
+        this.id = UUID.randomUUID().toString();
         this.paciente = paciente;
         this.medico = medico;
-        this.estadoCita = EstadoCita.AGENDADA;
-
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-    public void setFecha(Date fecha) {
         this.fecha = fecha;
+        this.hora = hora;
+        this.estado = EstadoCita.AGENDADA;
     }
+
+    // Métodos
+    public void cancelar() {
+        this.estado = EstadoCita.CANCELADA;
+    }
+
+    public void completar() {
+        this.estado = EstadoCita.COMPLETADA;
+    }
+
+    public boolean esActiva() {
+        return this.estado == EstadoCita.AGENDADA;
+    }
+
+    // Getters y Setters
+    public String getId() {
+        return id;
+    }
+
     public Paciente getPaciente() {
         return paciente;
     }
+
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
+
     public Medico getMedico() {
         return medico;
     }
+
     public void setMedico(Medico medico) {
         this.medico = medico;
     }
-    public EstadoCita getEstadoCita() {
-        return estadoCita;
-    }
-    public void setestado(EstadoCita estadoCita) {
-        this.estadoCita = estadoCita;
-    }
-    public String getMotivo() {
-        return motivo;
+
+    public LocalDate getFecha() {
+        return fecha;
     }
 
-    public void setMotivo(String motivo) {
-        this.motivo = motivo;
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalTime getHora() {
+        return hora;
+    }
+
+    public void setHora(LocalTime hora) {
+        this.hora = hora;
+    }
+
+    public EstadoCita getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoCita estado) {
+        this.estado = estado;
     }
 
     @Override
-    public String toString(){
-        return "Cita con el Dr. " + medico.getNombre() + " el " + fecha + " | Estado: "+estadoCita;
+    public String toString() {
+        return "Cita [ID=" + id + ", Fecha=" + fecha + ", Hora=" + hora +
+                ", Estado=" + estado + ", Paciente=" + paciente.getNombre() +
+                ", Medico=" + medico.getNombre() + "]";
     }
-
-
 }

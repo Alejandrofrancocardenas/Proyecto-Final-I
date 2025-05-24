@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="co.edu.uniquindio.sistemagestionhospital.Login"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.LoginController">
+    <children>
+        <!-- Ejemplo simple -->
+        <TextField fx:id="txtUsuario" layoutX="50" layoutY="50" promptText="Usuario"/>
+        <PasswordField fx:id="txtContrasena" layoutX="50" layoutY="100" promptText="Contraseña"/>
+        <Button layoutX="50" layoutY="150" text="Iniciar sesión" onAction="#iniciarSesion"/>
+    </children>
 </AnchorPane>

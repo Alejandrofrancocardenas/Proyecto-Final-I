@@ -1,7 +1,15 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
-public class Notificable {
-    void enviarNotificacion(String mensaje) {
-        
-    }
+import java.io.Serializable;
+
+/**
+ * Interfaz que representa a un objeto que puede recibir notificaciones.
+ */
+public interface Notificable extends Serializable {
+
+    /**
+     * Método que debe implementar cualquier clase que quiera recibir notificaciones.
+     * @param mensaje Contenido de la notificación.
+     */
+    void recibirNotificacion(String mensaje);
 }
