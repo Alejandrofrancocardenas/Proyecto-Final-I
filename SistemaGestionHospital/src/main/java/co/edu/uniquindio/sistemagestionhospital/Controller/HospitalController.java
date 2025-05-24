@@ -54,6 +54,40 @@ public class HospitalController {
                 .filter(cita -> cita.getEstado() == EstadoCita.AGENDADA)
                 .count();
     }
+    public Cita buscarCitaPorId(String idCita) {
+        for (Paciente paciente : pacientes) {
+            for (Cita cita : paciente.getCitas()) {
+                if (cita.getId().equals(idCita)) {
+                    return cita;
+                }
+            }
+        }
+        return null;
+    }
+    public Medico buscarMedicoPorId(String idMedico) {
+        for (Medico medico : medicos) {
+            if (medico.getId().equals(idMedico)) {
+                return medico;
+            }
+        }
+        return null; // No se encontró ningún médico con ese ID
+    }
+
+
+    public boolean registrarDiagnostico(String idMedico, String idCita, String diagnostico, String tratamiento) {
+        Medico medico = buscarMedicoPorId(idMedico);
+        if (medico == null) {
+            return false; // Médico no encontrado
+        }
+
+        Cita cita = buscarCitaPorId(idCita); // Suponiendo que tienes un método para buscar citas por ID
+        if (cita == null || !cita.getMedico().getId().equals(idMedico)) {
+            return false; // La cita no existe o no le pertenece al médico
+        }
+
+        return medico.registrarDiagnosticoYTratamiento(cita, diagnostico, tratamiento);
+    }
+
 
     public ArrayList<Paciente> getPacientes() {
         return pacientes;

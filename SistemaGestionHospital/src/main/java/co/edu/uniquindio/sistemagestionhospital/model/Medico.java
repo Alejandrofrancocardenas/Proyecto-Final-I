@@ -47,13 +47,19 @@ public class Medico extends Usuario implements Notificable {
         return true;
     }
 
-    public void registrarDiagnostico(Cita cita, String diagnostico, String tratamiento) {
-        if (citas.contains(cita)) {
-            HistorialMedico historial = new HistorialMedico(this, cita.getPaciente(), diagnostico, tratamiento);
-            cita.getPaciente().agregarHistorial(historial);
-            cita.setEstado(EstadoCita.COMPLETADA);
+    public boolean registrarDiagnosticoYTratamiento(Cita cita, String diagnostico, String tratamiento) {
+        if (!citas.contains(cita)) {
+            return false; // El médico no tiene esta cita
         }
+
+        HistorialMedico historial = new HistorialMedico(this, cita.getPaciente(), diagnostico, tratamiento);
+        cita.setHistorialMedico(historial);
+        cita.setEstado(EstadoCita.COMPLETADA);
+        cita.getPaciente().agregarHistorial(historial);
+        return true;
     }
+
+
 
     public ArrayList<Cita> getCitas() {
         return citas;

@@ -1,53 +1,55 @@
+// PacienteController.java
 package co.edu.uniquindio.sistemagestionhospital.Controller;
 
-import co.edu.uniquindio.sistemagestionhospital.model.*;
+import co.edu.uniquindio.sistemagestionhospital.model.Cita;
+import co.edu.uniquindio.sistemagestionhospital.model.HistorialMedico;
+import co.edu.uniquindio.sistemagestionhospital.model.Paciente;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PacienteController {
 
-    private ArrayList<Paciente> pacientes;
-
-    public PacienteController() {
-        this.pacientes = new ArrayList<>();
-    }
+    private List<Paciente> listaPacientes = new ArrayList<>();
 
     public boolean registrarPaciente(Paciente paciente) {
-        if (buscarPaciente(paciente.getId()) == null) {
-            pacientes.add(paciente);
-            return true;
-        }
-        return false;
+        if (buscarPaciente(paciente.getId()) != null) return false;
+        listaPacientes.add(paciente);
+        return true;
     }
 
     public Paciente buscarPaciente(String id) {
-        for (Paciente p : pacientes) {
-            if (p.getId().equals(id)) {
-                return p;
-            }
+        for (Paciente p : listaPacientes) {
+            if (p.getId().equals(id)) return p;
         }
         return null;
     }
 
-    public boolean actualizarDatosPaciente(String id, String nombre, String correo, String contrasena) {
-        Paciente paciente = buscarPaciente(id);
-        if (paciente != null) {
-            paciente.actualizarDatos(nombre, correo, contrasena);
-            return true;
-        }
-        return false;
+    public boolean actualizarDatos(String id, String nuevoNombre, String nuevoCorreo, String nuevaContrasena) {
+        Paciente p = buscarPaciente(id);
+        if (p == null) return false;
+        p.actualizarDatos(nuevoNombre, nuevoCorreo, nuevaContrasena);
+        return true;
     }
 
-    public boolean eliminarPaciente(String id) {
-        Paciente paciente = buscarPaciente(id);
-        if (paciente != null) {
-            pacientes.remove(paciente);
-            return true;
-        }
-        return false;
+    public boolean solicitarCita(String idPaciente, Cita cita) {
+        Paciente p = buscarPaciente(idPaciente);
+        if (p == null) return false;
+        p.solicitarCita(cita);
+        return true;
     }
 
-    public ArrayList<Paciente> getPacientes() {
-        return pacientes;
+    public boolean cancelarCita(String idPaciente, Cita cita) {
+        Paciente p = buscarPaciente(idPaciente);
+        return p != null && p.cancelarCita(cita);
+    }
+
+    public List<HistorialMedico> consultarHistorial(String idPaciente) {
+        Paciente p = buscarPaciente(idPaciente);
+        return p != null ? p.consultarHistorialMedico() : new ArrayList<>();
+    }
+
+    public List<Paciente> getListaPacientes() {
+        return listaPacientes;
     }
 }
