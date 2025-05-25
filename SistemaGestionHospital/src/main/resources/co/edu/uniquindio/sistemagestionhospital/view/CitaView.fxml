@@ -1,14 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="co.edu.uniquindio.sistemagestionhospital.view.CitaView"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.CitaViewController"
+            prefWidth="600" prefHeight="400">
+
+    <VBox spacing="10" padding="20">
+        <Label text="Gestión de Citas" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+        <HBox spacing="10">
+            <Label text="Paciente:" />
+            <ComboBox fx:id="cbPaciente" prefWidth="200" />
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Médico:" />
+            <ComboBox fx:id="cbMedico" prefWidth="200" />
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Fecha (YYYY-MM-DD):" />
+            <TextField fx:id="txtFecha" promptText="2025-06-01" prefWidth="150"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <Label text="Hora (HH:MM):" />
+            <TextField fx:id="txtHora" promptText="14:30" prefWidth="150"/>
+        </HBox>
+
+
+        <HBox spacing="10">
+            <Button text="Agendar Cita" onAction="#agendarCita"/>
+            <Button text="Cancelar Cita" onAction="#cancelarCita"/>
+        </HBox>
+
+        <Label text="Citas del Paciente:" style="-fx-font-weight: bold;" />
+        <ListView fx:id="listaCitas" prefHeight="150" />
+        <Label text="Historial Médico del Paciente:" style="-fx-font-weight: bold;"/>
+        <ListView fx:id="listaHistorial" prefHeight="150"/>
+        <HBox spacing="10">
+            <TextField fx:id="txtNuevaEntradaHistorial" promptText="Nueva entrada al historial..." prefWidth="400"/>
+            <Button text="Agregar al historial" onAction="#agregarHistorialMedico"/>
+        </HBox>
+
+
+    </VBox>
 
 </AnchorPane>

@@ -22,9 +22,7 @@ public class HistorialMedico {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-    public Paciente getPaciente(){
-        return paciente;
-    }
+
     public void setPaciente(Paciente paciente){
         this.paciente = paciente;
     }

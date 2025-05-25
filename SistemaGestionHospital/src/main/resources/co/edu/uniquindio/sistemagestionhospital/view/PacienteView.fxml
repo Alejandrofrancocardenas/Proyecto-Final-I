@@ -64,8 +64,6 @@
                 <TableColumn fx:id="colCorreo" text = "Correo"/>
                 <TableColumn fx:id="colNombre" text="Nombre"/>
                 <TableColumn fx:id="colCedula" text="Cédula"/>
-                <TableColumn fx:id="colTelefono" text="Teléfono"/>
-                <TableColumn fx:id="colEmail" text="Email"/>
                 <TableColumn fx:id="colContrasena" text="Contraseña"/>
             </columns>
         </TableView>
