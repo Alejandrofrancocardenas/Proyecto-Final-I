@@ -2,18 +2,13 @@ package co.edu.uniquindio.sistemagestionhospital.viewController;
 
 import co.edu.uniquindio.sistemagestionhospital.Controller.HospitalController;
 import co.edu.uniquindio.sistemagestionhospital.model.Paciente;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-public class PacienteViewController implements Initializable {
-
-    private final HospitalController hospitalController = HospitalController.getInstance(); // O inyectado si es singleton
+public class PacienteViewController {
 
     @FXML
     private TextField txtId;
@@ -22,26 +17,55 @@ public class PacienteViewController implements Initializable {
     @FXML
     private TextField txtCorreo;
     @FXML
-    private TextField txtContrasena;
+    private PasswordField txtContrasena;
     @FXML
     private TextField txtCedula;
     @FXML
-    private Button btnRegistrar;
+    private TableView<Paciente> tablaPacientes;
     @FXML
-    private Button btnModificar;
+    private TableColumn<Paciente, String> colId;
     @FXML
-    private Button btnEliminar;
+    private TableColumn<Paciente, String> colNombre;
     @FXML
-    private Button btnHistorial;
+    private TableColumn<Paciente, String> colCorreo;
     @FXML
-    private Button btnLimpiarCampos;
+    private TableColumn<Paciente, String> colCedula;
+    @FXML
+    private TableColumn<Paciente, String> colContrasena;
+    @FXML
+    private Label lblMensaje;
+
+    private final HospitalController controlador = HospitalController.getInstance();
+    private final ObservableList<Paciente> listaPacientes = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        btnRegistrar.setOnAction(event -> registrarPaciente());
-        btnModificar.setOnAction(event -> modificarPaciente());
-        btnEliminar.setOnAction(event -> eliminarPaciente());
-        btnHistorial.setOnAction(event -> verHistorial());
+        colId.setCellValueFactory(cellData -> cellData.getValue().idProperty());
+        colNombre.setCellValueFactory(cellData -> cellData.getValue().nombreProperty());
+        colCorreo.setCellValueFactory(cellData -> cellData.getValue().correoProperty());
+        colCedula.setCellValueFactory(cellData -> cellData.getValue().cedulaProperty());
+        colContrasena.setCellValueFactory(cellData -> cellData.getValue().contrasenaProperty());
+
+        tablaPacientes.setItems(listaPacientes);
+        actualizarTabla();
+
+        tablaPacientes.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldSelection, newSelection) -> mostrarDatosPacienteSeleccionado(newSelection)
+        );
+    }
+
+    private void actualizarTabla() {
+        listaPacientes.setAll(controlador.getPacientes());
+    }
+
+    private void mostrarDatosPacienteSeleccionado(Paciente paciente) {
+        if (paciente != null) {
+            txtId.setText(paciente.getId());
+            txtNombre.setText(paciente.getNombre());
+            txtCorreo.setText(paciente.getCorreo());
+            txtContrasena.setText(paciente.getContrasena());
+            txtCedula.setText(paciente.getCedula());
+        }
     }
 
     @FXML
@@ -52,11 +76,20 @@ public class PacienteViewController implements Initializable {
         String contrasena = txtContrasena.getText();
         String cedula = txtCedula.getText();
 
-        Paciente paciente = new Paciente(id, nombre, correo, contrasena, cedula);
-        hospitalController.registrarPaciente(paciente);
+        if (id.isBlank() || nombre.isBlank() || correo.isBlank() || contrasena.isBlank() || cedula.isBlank()) {
+            mostrarMensaje("Todos los campos son obligatorios.", true);
+            return;
+        }
 
-        mostrarMensaje("Paciente registrado con éxito.");
-        limpiarCampos();
+        Paciente paciente = new Paciente(id, nombre, correo, contrasena, cedula);
+
+        if (controlador.registrarPaciente(paciente)) {
+            mostrarMensaje("Paciente registrado exitosamente.", false);
+            actualizarTabla();
+            limpiarCampos();
+        } else {
+            mostrarMensaje("Ya existe un paciente con ese ID.", true);
+        }
     }
 
     @FXML
@@ -67,43 +100,40 @@ public class PacienteViewController implements Initializable {
         String contrasena = txtContrasena.getText();
         String cedula = txtCedula.getText();
 
-        boolean modificado = hospitalController.modificarPaciente(id, nombre, correo, contrasena, cedula);
-        if (modificado) {
-            mostrarMensaje("Paciente modificado con éxito.");
-        } else {
-            mostrarMensaje("No se encontró el paciente.");
+        if (id.isBlank()) {
+            mostrarMensaje("El ID del paciente es obligatorio para modificar.", true);
+            return;
         }
-        limpiarCampos();
+
+        boolean modificado = controlador.modificarPaciente(id, nombre, correo, contrasena, cedula);
+
+        if (modificado) {
+            mostrarMensaje("Paciente modificado exitosamente.", false);
+            actualizarTabla();
+            limpiarCampos();
+        } else {
+            mostrarMensaje("No se encontró un paciente con ese ID.", true);
+        }
     }
 
     @FXML
     private void eliminarPaciente() {
         String correo = txtCorreo.getText();
-        boolean eliminado = hospitalController.eliminarPaciente(correo);
+
+        if (correo.isBlank()) {
+            mostrarMensaje("Debes proporcionar el correo para eliminar.", true);
+            return;
+        }
+
+        boolean eliminado = controlador.eliminarPaciente(correo);
+
         if (eliminado) {
-            mostrarMensaje("Paciente eliminado con éxito.");
+            mostrarMensaje("Paciente eliminado exitosamente.", false);
+            actualizarTabla();
+            limpiarCampos();
         } else {
-            mostrarMensaje("No se encontró el paciente con ese correo.");
+            mostrarMensaje("No se encontró un paciente con ese correo.", true);
         }
-        limpiarCampos();
-    }
-
-    private void verHistorial() {
-        String id = txtId.getText();
-        Paciente paciente = hospitalController.buscarPacientePorId(id);
-        if (paciente != null) {
-            StringBuilder historial = new StringBuilder();
-            paciente.getCitas().forEach(c -> historial.append(c.toString()).append("\n"));
-            mostrarMensaje("Historial:\n" + historial.toString());
-        } else {
-            mostrarMensaje("Paciente no encontrado.");
-        }
-    }
-
-    private void mostrarMensaje(String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
     }
 
     @FXML
@@ -113,14 +143,12 @@ public class PacienteViewController implements Initializable {
         txtCorreo.clear();
         txtContrasena.clear();
         txtCedula.clear();
+        tablaPacientes.getSelectionModel().clearSelection();
+        lblMensaje.setText("");
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        btnRegistrar.setOnAction(event -> registrarPaciente());
-        btnModificar.setOnAction(event -> modificarPaciente());
-        btnEliminar.setOnAction(event -> eliminarPaciente());
-        btnHistorial.setOnAction(event -> verHistorial());
-        btnLimpiarCampos.setOnAction(event -> limpiarCampos());
+    private void mostrarMensaje(String mensaje, boolean esError) {
+        lblMensaje.setText(mensaje);
+        lblMensaje.setStyle("-fx-text-fill: " + (esError ? "red;" : "green;"));
     }
 }

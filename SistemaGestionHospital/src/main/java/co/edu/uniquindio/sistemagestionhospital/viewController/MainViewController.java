@@ -33,15 +33,23 @@ public class MainViewController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+            alert.setTitle("Error al cargar la vista");
+            alert.setHeaderText("No se pudo abrir la vista de pacientes.");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
     }
-
-
 
 
     @FXML
     void gestionarMedicos(ActionEvent event) {
         System.out.println("Abriendo ventana de médicos...");
+    }
+
+    @FXML
+    void gestionarAdministrador(ActionEvent event) {
+        System.out.println("Abriendo ventana de administrador...");
     }
 
     @FXML

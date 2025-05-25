@@ -1,46 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.*?>
 
-<VBox xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.PacienteViewController"
-      spacing="15" alignment="CENTER" prefWidth="600" prefHeight="600">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.PacienteViewController">
 
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+    <top>
+        <Label text="Gestión de Pacientes" BorderPane.alignment="CENTER">
+            <font>
+                <Font size="20"/>
+            </font>
+            <padding>
+                <Insets top="10" bottom="10"/>
+            </padding>
+        </Label>
+    </top>
 
-    <Label text="Gestión de Pacientes" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <GridPane hgap="10" vgap="10">
+                <Label text="ID:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtId" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
+                <Label text="Nombre:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtNombre" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
+                <Label text="Correo:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtCorreo" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
-    <TextField fx:id="txtId" promptText="ID del paciente" />
-    <TextField fx:id="txtNombre" promptText="Nombre completo" />
-    <TextField fx:id="txtCorreo" promptText="Correo electrónico" />
-    <PasswordField fx:id="txtContrasena" promptText="Contraseña" />
-    <TextField fx:id="txtCedula" promptText="Cédula" />
+                <Label text="Contraseña:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <PasswordField fx:id="txtContrasena" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnRegistrarPaciente" text="Registrar" onAction="#registrarPaciente"/>
-        <Button fx:id="btnModificarPaciente" text="Modificar" onAction="#modificarPaciente"/>
-    </HBox>
+                <Label text="Cédula:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="txtCedula" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            </GridPane>
 
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnEliminarPaciente" text="Eliminar" onAction="#eliminarPaciente"/>
-        <Button fx:id="btnLimpiarCampos" text="Limpiar" onAction="#limpiarCampos"/>
-    </HBox>
+            <HBox spacing="10">
+                <Button text="Registrar" onAction="#registrarPaciente"/>
+                <Button text="Modificar" onAction="#modificarPaciente"/>
+                <Button text="Eliminar" onAction="#eliminarPaciente"/>
+                <Button text="Limpiar" onAction="#limpiarCampos"/>
+            </HBox>
 
-    <TableView fx:id="tablaPacientes" prefHeight="200">
-        <columns>
-            <TableColumn fx:id="colId" text="ID" />
-            <TableColumn fx:id="colNombre" text="Nombre" />
-            <TableColumn fx:id="colCorreo" text="Correo" />
-            <TableColumn fx:id="colCedula" text="Cédula" />
-        </columns>
-    </TableView>
+            <Label fx:id="lblMensaje" text="" style="-fx-text-fill: red;"/>
+        </VBox>
+    </center>
 
-</VBox>
+    <bottom>
+        <TableView fx:id="tablaPacientes">
+            <columns>
+                <TableColumn fx:id="colId" text = "Id"/>
+                <TableColumn fx:id="colCorreo" text = "Correo"/>
+                <TableColumn fx:id="colNombre" text="Nombre"/>
+                <TableColumn fx:id="colCedula" text="Cédula"/>
+                <TableColumn fx:id="colTelefono" text="Teléfono"/>
+                <TableColumn fx:id="colEmail" text="Email"/>
+                <TableColumn fx:id="colContrasena" text="Contraseña"/>
+            </columns>
+        </TableView>
 
+    </bottom>
+</BorderPane>

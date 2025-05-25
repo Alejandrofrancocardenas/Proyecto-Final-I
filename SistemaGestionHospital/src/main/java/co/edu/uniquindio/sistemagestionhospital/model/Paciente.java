@@ -1,18 +1,21 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Paciente extends Usuario implements Notificable {
 
-    private String cedula;
-    private ArrayList<Cita> citas;
-    private ArrayList<HistorialMedico> historiales;
-    private ArrayList<String> notificaciones;
+    private final StringProperty cedula;
+    private final ArrayList<Cita> citas;
+    private final ArrayList<HistorialMedico> historiales;
+    private final ArrayList<String> notificaciones;
 
     public Paciente(String id, String nombre, String correo, String contrasena, String cedula) {
         super(nombre, id, correo, contrasena);
-        this.cedula = cedula;
+        this.cedula = new SimpleStringProperty(cedula);
         this.citas = new ArrayList<>();
         this.historiales = new ArrayList<>();
         this.notificaciones = new ArrayList<>();
@@ -43,7 +46,7 @@ public class Paciente extends Usuario implements Notificable {
     }
 
     public boolean cancelarCita(Cita cita) {
-        return citas.remove(cita); // Solo si existe
+        return citas.remove(cita);
     }
 
     public List<HistorialMedico> consultarHistorialMedico() {
@@ -59,18 +62,22 @@ public class Paciente extends Usuario implements Notificable {
         notificaciones.add(mensaje);
     }
 
-    // Getters
+    // Getters y Setters para propiedades
     public String getCedula() {
+        return cedula.get();
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula.set(cedula);
+    }
+
+    public StringProperty cedulaProperty() {
         return cedula;
     }
 
     public List<Cita> getCitas() {
         return citas;
     }
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
-    }
-
 
     public List<HistorialMedico> getHistoriales() {
         return historiales;

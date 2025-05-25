@@ -1,47 +1,69 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
- public abstract class Usuario {
-    protected String id;
-    protected String nombre;
-    protected String correo;
-    protected  String contrasena;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
-    public Usuario(String id, String nombre, String correo, String contrasena) {
-        this.id = id;
-        this.nombre = nombre;
-        this.correo = correo;
-        this.contrasena = contrasena;
+public abstract class Usuario {
+    protected StringProperty nombre;
+    protected StringProperty id;
+    protected StringProperty correo;
+    protected StringProperty contrasena;
+
+    public Usuario(String nombre, String id, String correo, String contrasena) {
+        this.nombre = new SimpleStringProperty(nombre);
+        this.id = new SimpleStringProperty(id);
+        this.correo = new SimpleStringProperty(correo);
+        this.contrasena = new SimpleStringProperty(contrasena);
     }
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
+
+    // Getters y setters
     public String getNombre() {
+        return nombre.get();
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre.set(nombre);
+    }
+
+    public StringProperty nombreProperty() {
         return nombre;
     }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+    public String getId() {
+        return id.get();
     }
+
+    public void setId(String id) {
+        this.id.set(id);
+    }
+
+    public StringProperty idProperty() {
+        return id;
+    }
+
     public String getCorreo() {
+        return correo.get();
+    }
+
+    public void setCorreo(String correo) {
+        this.correo.set(correo);
+    }
+
+    public StringProperty correoProperty() {
         return correo;
     }
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
+
     public String getContrasena() {
-        return contrasena;
+        return contrasena.get();
     }
+
     public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
+        this.contrasena.set(contrasena);
+    }
+
+    public StringProperty contrasenaProperty() {
+        return contrasena;
     }
 
     public abstract void mostrarMenu();
-
-
-    @Override
-     public String toString() {
-        return nombre + " (" + id + ")";
-    }
 }
