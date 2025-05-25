@@ -12,7 +12,7 @@
 
     <center>
         <VBox spacing="15" alignment="CENTER" padding="20">
-            <Button text="Gestión de Pacientes" prefWidth="200"/>
+            <Button text="Gestión de Pacientes" onAction="#gestionarPacientes" prefWidth="200"/>
             <Button text="Gestión de Médicos" prefWidth="200"/>
             <Button text="Gestión de Citas" prefWidth="200"/>
             <Button text="Cerrar Sesión" prefWidth="200"/>

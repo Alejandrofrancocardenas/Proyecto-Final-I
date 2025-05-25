@@ -26,7 +26,7 @@ public class LoginController {
         if (usuario.equals("admin") && contrasena.equals("1234")) {
             try {
                 // Cargar Dashboard.fxml
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/sistemagestionhospital/Dashboard.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/sistemagestionhospital/view/Dashboard.fxml"));
                 Parent dashboardRoot = fxmlLoader.load();
 
                 // Obtener la ventana actual y cambiar la escena

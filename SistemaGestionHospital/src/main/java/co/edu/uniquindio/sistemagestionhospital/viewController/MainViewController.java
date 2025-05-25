@@ -2,7 +2,13 @@ package co.edu.uniquindio.sistemagestionhospital.viewController;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainViewController {
 
@@ -17,9 +23,22 @@ public class MainViewController {
 
     @FXML
     void gestionarPacientes(ActionEvent event) {
-        System.out.println("Abriendo ventana de pacientes...");
-        // Aquí puedes cargar otro FXML si deseas
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/sistemagestionhospital/view/Dashboard.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Gestión de Pacientes");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            ((Stage) btnPacientes.getScene().getWindow()).close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     void gestionarMedicos(ActionEvent event) {
@@ -31,4 +50,6 @@ public class MainViewController {
         System.out.println("Sesión cerrada");
         System.exit(0); // Cierra la app
     }
+
+
 }
