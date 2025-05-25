@@ -22,22 +22,21 @@ public class MainViewController {
     private Button btnCerrarSesion;
 
     @FXML
-    void gestionarPacientes(ActionEvent event) {
+    private void gestionarPacientes(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/sistemagestionhospital/view/Dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/sistemagestionhospital/view/PacienteView.fxml"));
             Parent root = loader.load();
 
             Stage stage = new Stage();
             stage.setTitle("Gestión de Pacientes");
             stage.setScene(new Scene(root));
             stage.show();
-
-            ((Stage) btnPacientes.getScene().getWindow()).close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 
 
     @FXML
