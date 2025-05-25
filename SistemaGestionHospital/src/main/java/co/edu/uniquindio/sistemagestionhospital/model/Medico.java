@@ -1,18 +1,20 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
 import java.util.ArrayList;
-
+import java.util.List;
 public class Medico extends Usuario implements Notificable {
 
     private String especialidad;
     private ArrayList<Cita> citas;
     private ArrayList<String> notificaciones;
+    private List<HorarioAtencion> horarios;
 
     public Medico(String id, String nombre, String correo, String contrasena, String especialidad) {
         super(nombre, id, correo, contrasena);
         this.especialidad = especialidad;
         this.citas = new ArrayList<>();
         this.notificaciones = new ArrayList<>();
+        this.horarios = new ArrayList<>();
     }
 
     @Override
@@ -34,6 +36,21 @@ public class Medico extends Usuario implements Notificable {
             return true;
         }
         return false;
+    }
+    public boolean agregarHorario(HorarioAtencion horario) {
+        if (!horarios.contains(horario)) {
+            horarios.add(horario);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean eliminarHorario(HorarioAtencion horario) {
+        return horarios.remove(horario);
+    }
+
+    public List<HorarioAtencion> getHorarios() {
+        return horarios;
     }
 
     public boolean registrarHistorialMedico(Cita cita, String diagnostico, String tratamiento) {

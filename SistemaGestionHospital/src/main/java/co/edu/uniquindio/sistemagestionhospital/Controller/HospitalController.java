@@ -1,19 +1,75 @@
 package co.edu.uniquindio.sistemagestionhospital.Controller;
-
+import co.edu.uniquindio.sistemagestionhospital.model.Sala;
 import co.edu.uniquindio.sistemagestionhospital.model.*;
 
 import java.util.ArrayList;
-
+import java.util.List;
 public class HospitalController {
 
     private final ArrayList<Paciente> pacientes;
     private final ArrayList<Medico> medicos;
     private final ArrayList<Cita> citas;
+    private ArrayList<Sala> salas = new ArrayList<>();
 
     public HospitalController() {
         this.pacientes = new ArrayList<>();
         this.medicos = new ArrayList<>();
         this.citas = new ArrayList<>();
+    }
+
+    public boolean registrarSala(Sala sala) {
+        if (buscarSalaPorId(sala.getId()) != null) {
+            return false; // Ya existe
+        }
+        salas.add(sala);
+        return true;
+    }
+    public boolean asignarHorarioAMedico(String idMedico, HorarioAtencion horario) {
+        Medico medico = buscarMedicoPorId(idMedico);
+        if (medico != null) {
+            return medico.agregarHorario(horario);
+        }
+        return false;
+    }
+    public boolean eliminarHorarioDeMedico(String idMedico, HorarioAtencion horario) {
+        Medico medico = buscarMedicoPorId(idMedico);
+        if (medico != null) {
+            return medico.eliminarHorario(horario);
+        }
+        return false;
+    }
+
+
+    public boolean modificarSala(String id, String nuevoNombre, int nuevaCapacidad) {
+        Sala sala = buscarSalaPorId(id);
+        if (sala == null) {
+            return false;
+        }
+        sala.setNombre(nuevoNombre);
+        sala.setCapacidad(nuevaCapacidad);
+        return true;
+    }
+
+    public boolean eliminarSala(String id) {
+        Sala sala = buscarSalaPorId(id);
+        if (sala != null) {
+            salas.remove(sala);
+            return true;
+        }
+        return false;
+    }
+
+    public Sala buscarSalaPorId(String id) {
+        for (Sala sala : salas) {
+            if (sala.getId().equals(id)) {
+                return sala;
+            }
+        }
+        return null;
+    }
+
+    public List<Sala> getSalas() {
+        return salas;
     }
 
     public void registrarPaciente(Paciente paciente) {
