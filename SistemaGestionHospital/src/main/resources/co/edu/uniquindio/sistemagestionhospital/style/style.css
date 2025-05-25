@@ -1,0 +1,24 @@
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-color: #f4f4f4;
+}
+
+.vbox {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+    -fx-padding: 30;
+}
+
+.button {
+    -fx-pref-width: 200px;
+    -fx-font-size: 14px;
+    -fx-background-color: #3a7bd5;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.5, 0.0, 1.0);
+}
+
+.button:hover {
+    -fx-background-color: #2851a3;
+}

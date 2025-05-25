@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" alignment="CENTER"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.MainViewController"
+      stylesheets="@../style/style.css">
+
+    <padding>
+        <Insets top="40" right="20" bottom="40" left="20"/>
+    </padding>
+
+    <Button fx:id="btnPacientes" text="Gestionar Pacientes" onAction="#gestionarPacientes"/>
+    <Button fx:id="btnMedicos" text="Gestionar Médicos" onAction="#gestionarMedicos"/>
+    <Button fx:id="btnCerrarSesion" text="Cerrar Sesión" onAction="#cerrarSesion"/>
+
+</VBox>
