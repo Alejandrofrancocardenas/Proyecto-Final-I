@@ -7,7 +7,7 @@
 <VBox xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.PacienteViewController"
-      spacing="15" alignment="CENTER" prefWidth="400" prefHeight="400">
+      spacing="15" alignment="CENTER" prefWidth="600" prefHeight="600">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -15,20 +15,32 @@
 
     <Label text="Gestión de Pacientes" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
 
+
+
     <TextField fx:id="txtId" promptText="ID del paciente" />
     <TextField fx:id="txtNombre" promptText="Nombre completo" />
     <TextField fx:id="txtCorreo" promptText="Correo electrónico" />
-    <TextField fx:id="txtContrasena" promptText="Contraseña" />
+    <PasswordField fx:id="txtContrasena" promptText="Contraseña" />
     <TextField fx:id="txtCedula" promptText="Cédula" />
 
     <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnRegistrar" text="Registrar" />
-        <Button fx:id="btnModificar" text="Modificar" />
+        <Button fx:id="btnRegistrarPaciente" text="Registrar" onAction="#registrarPaciente"/>
+        <Button fx:id="btnModificarPaciente" text="Modificar" onAction="#modificarPaciente"/>
     </HBox>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnEliminar" text="Eliminar" />
-        <Button fx:id="btnHistorial" text="Ver Historial" />
+        <Button fx:id="btnEliminarPaciente" text="Eliminar" onAction="#eliminarPaciente"/>
+        <Button fx:id="btnLimpiarCampos" text="Limpiar" onAction="#limpiarCampos"/>
     </HBox>
 
+    <TableView fx:id="tablaPacientes" prefHeight="200">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" />
+            <TableColumn fx:id="colNombre" text="Nombre" />
+            <TableColumn fx:id="colCorreo" text="Correo" />
+            <TableColumn fx:id="colCedula" text="Cédula" />
+        </columns>
+    </TableView>
+
 </VBox>
+

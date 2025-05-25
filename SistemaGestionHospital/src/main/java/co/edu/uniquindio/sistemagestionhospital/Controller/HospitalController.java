@@ -1,36 +1,50 @@
 package co.edu.uniquindio.sistemagestionhospital.Controller;
-import co.edu.uniquindio.sistemagestionhospital.model.Sala;
+
 import co.edu.uniquindio.sistemagestionhospital.model.*;
+
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+
 public class HospitalController {
 
+    // ✅ Instancia estática (única)
+    private static HospitalController instancia;
+
+    // 🔐 Atributos
     private final ArrayList<Paciente> pacientes;
     private final ArrayList<Medico> medicos;
     private final ArrayList<Cita> citas;
-    private ArrayList<Sala> salas = new ArrayList<>();
+    private final ArrayList<Sala> salas;
 
-    public HospitalController() {
+    // 🔒 Constructor privado
+    private HospitalController() {
         this.pacientes = new ArrayList<>();
         this.medicos = new ArrayList<>();
         this.citas = new ArrayList<>();
+        this.salas = new ArrayList<>();
     }
 
-    public boolean registrarSala(Sala sala) {
-        if (buscarSalaPorId(sala.getId()) != null) {
-            return false; // Ya existe
+    // ✅ Método para obtener la instancia única
+    public static HospitalController getInstance() {
+        if (instancia == null) {
+            instancia = new HospitalController();
         }
+        return instancia;
+    }
+
+    // 🎯 Métodos existentes (sin cambios en lógica)
+    public boolean registrarSala(Sala sala) {
+        if (buscarSalaPorId(sala.getId()) != null) return false;
         salas.add(sala);
         return true;
     }
+
     public boolean asignarHorarioAMedico(String idMedico, HorarioAtencion horario) {
         Medico medico = buscarMedicoPorId(idMedico);
-        if (medico != null) {
-            return medico.agregarHorario(horario);
-        }
-        return false;
+        return medico != null && medico.agregarHorario(horario);
     }
+
     public boolean asignarSalaAHorario(String idMedico, String dia, String horaInicio, Sala sala) {
         Medico medico = buscarMedicoPorId(idMedico);
         if (medico != null) {
@@ -38,13 +52,11 @@ public class HospitalController {
 
             for (HorarioAtencion horario : medico.getHorarios()) {
                 if (horario.getDia().equals(diaSemana) && horario.getHoraInicio().equals(horaInicio)) {
-
-                    // Verificar si la sala ya está asignada en ese horario a otro médico
                     for (Medico otroMedico : getMedicos()) {
                         for (HorarioAtencion otroHorario : otroMedico.getHorarios()) {
-                            if (otroHorario.getDia().equals(diaSemana)
-                                    && otroHorario.getHoraInicio().equals(horaInicio)
-                                    && sala.equals(otroHorario.getSala())) {
+                            if (otroHorario.getDia().equals(diaSemana) &&
+                                    otroHorario.getHoraInicio().equals(horaInicio) &&
+                                    sala.equals(otroHorario.getSala())) {
                                 medico.recibirNotificacion("No se pudo asignar la sala '" + sala.getNombre()
                                         + "' el " + dia + " a las " + horaInicio + " porque ya está ocupada.");
                                 return false;
@@ -52,8 +64,7 @@ public class HospitalController {
                         }
                     }
 
-
-                    horario.setSala((List<Sala>) sala);
+                    horario.setSala(List.of(sala));  // Corrigido: convertir a lista
                     medico.recibirNotificacion("Se te ha asignado la sala '" + sala.getNombre()
                             + "' el " + dia + " a las " + horaInicio + ".");
                     return true;
@@ -63,29 +74,19 @@ public class HospitalController {
         return false;
     }
 
-
     public List<HorarioAtencion> obtenerHorariosDeMedico(String idMedico) {
         Medico medico = buscarMedicoPorId(idMedico);
-        if (medico != null) {
-            return medico.getHorarios();
-        }
-        return new ArrayList<>(); // Lista vacía si no se encuentra el médico
+        return (medico != null) ? medico.getHorarios() : new ArrayList<>();
     }
 
     public boolean eliminarHorarioDeMedico(String idMedico, HorarioAtencion horario) {
         Medico medico = buscarMedicoPorId(idMedico);
-        if (medico != null) {
-            return medico.eliminarHorario(horario);
-        }
-        return false;
+        return medico != null && medico.eliminarHorario(horario);
     }
-
 
     public boolean modificarSala(String id, String nuevoNombre, int nuevaCapacidad) {
         Sala sala = buscarSalaPorId(id);
-        if (sala == null) {
-            return false;
-        }
+        if (sala == null) return false;
         sala.setNombre(nuevoNombre);
         sala.setCapacidad(nuevaCapacidad);
         return true;
@@ -93,22 +94,15 @@ public class HospitalController {
 
     public boolean eliminarSala(String id) {
         Sala sala = buscarSalaPorId(id);
-        if (sala != null) {
-            salas.remove(sala);
-            return true;
-        }
-        return false;
+        return sala != null && salas.remove(sala);
     }
 
     public Sala buscarSalaPorId(String id) {
         for (Sala sala : salas) {
-            if (sala.getId().equals(id)) {
-                return sala;
-            }
+            if (sala.getId().equals(id)) return sala;
         }
         return null;
     }
-
 
     public boolean eliminarPaciente(String correo) {
         return pacientes.removeIf(p -> p.getCorreo().equals(correo));
@@ -127,6 +121,7 @@ public class HospitalController {
         cita.getPaciente().agregarCita(cita);
         cita.getMedico().agregarCita(cita);
     }
+
     public boolean modificarMedico(String id, String nuevoNombre, String nuevoCorreo, String nuevaContrasena, String nuevaEspecialidad) {
         Medico medico = buscarMedicoPorId(id);
         if (medico != null) {
@@ -153,9 +148,7 @@ public class HospitalController {
 
     public Paciente buscarPacientePorId(String id) {
         for (Paciente paciente : pacientes) {
-            if (paciente.getId().equals(id)) {
-                return paciente;
-            }
+            if (paciente.getId().equals(id)) return paciente;
         }
         return null;
     }
@@ -172,41 +165,29 @@ public class HospitalController {
                 .filter(cita -> cita.getEstado() == EstadoCita.AGENDADA)
                 .count();
     }
+
     public Cita buscarCitaPorId(String idCita) {
         for (Paciente paciente : pacientes) {
             for (Cita cita : paciente.getCitas()) {
-                if (cita.getId().equals(idCita)) {
-                    return cita;
-                }
+                if (cita.getId().equals(idCita)) return cita;
             }
         }
         return null;
     }
+
     public Medico buscarMedicoPorId(String idMedico) {
         for (Medico medico : medicos) {
-            if (medico.getId().equals(idMedico)) {
-                return medico;
-            }
+            if (medico.getId().equals(idMedico)) return medico;
         }
-        return null; // No se encontró ningún médico con ese ID
+        return null;
     }
-
 
     public boolean registrarDiagnostico(String idMedico, String idCita, String diagnostico, String tratamiento) {
         Medico medico = buscarMedicoPorId(idMedico);
-        if (medico == null) {
-            return false; // Médico no encontrado
-        }
-
         Cita cita = buscarCitaPorId(idCita);
-        if (cita == null || !cita.getMedico().getId().equals(idMedico)) {
-            return false; // La cita no existe o no le pertenece al médico
-        }
-
-        return medico.registrarDiagnosticoYTratamiento(cita, diagnostico, tratamiento);
-    }
-    public List<Sala> getSalas() {
-        return salas;
+        return medico != null && cita != null &&
+                cita.getMedico().getId().equals(idMedico) &&
+                medico.registrarDiagnosticoYTratamiento(cita, diagnostico, tratamiento);
     }
 
     public void registrarPaciente(Paciente paciente) {
@@ -216,7 +197,6 @@ public class HospitalController {
     public void registrarMedico(Medico medico) {
         medicos.add(medico);
     }
-
 
     public ArrayList<Paciente> getPacientes() {
         return pacientes;
@@ -228,5 +208,9 @@ public class HospitalController {
 
     public ArrayList<Cita> getCitas() {
         return citas;
+    }
+
+    public List<Sala> getSalas() {
+        return salas;
     }
 }
