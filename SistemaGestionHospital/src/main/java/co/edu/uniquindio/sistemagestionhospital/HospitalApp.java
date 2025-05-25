@@ -6,13 +6,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.Objects;
-
 public class HospitalApp extends Application {
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/hospital/vista/login.fxml"))); // o menuPrincipal.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/sistemagestionhospital/view/MainView.fxml"));
+        Parent root = loader.load();
+
         primaryStage.setTitle("Sistema de Gestión Hospitalaria");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
