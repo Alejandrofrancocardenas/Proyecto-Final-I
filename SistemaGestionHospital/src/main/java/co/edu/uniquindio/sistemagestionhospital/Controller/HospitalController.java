@@ -1,7 +1,7 @@
 package co.edu.uniquindio.sistemagestionhospital.Controller;
 import co.edu.uniquindio.sistemagestionhospital.model.Sala;
 import co.edu.uniquindio.sistemagestionhospital.model.*;
-
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 public class HospitalController {
@@ -31,6 +31,47 @@ public class HospitalController {
         }
         return false;
     }
+    public boolean asignarSalaAHorario(String idMedico, String dia, String horaInicio, Sala sala) {
+        Medico medico = buscarMedicoPorId(idMedico);
+        if (medico != null) {
+            DayOfWeek diaSemana = DayOfWeek.valueOf(dia.toUpperCase());
+
+            for (HorarioAtencion horario : medico.getHorarios()) {
+                if (horario.getDia().equals(diaSemana) && horario.getHoraInicio().equals(horaInicio)) {
+
+                    // Verificar si la sala ya está asignada en ese horario a otro médico
+                    for (Medico otroMedico : getMedicos()) {
+                        for (HorarioAtencion otroHorario : otroMedico.getHorarios()) {
+                            if (otroHorario.getDia().equals(diaSemana)
+                                    && otroHorario.getHoraInicio().equals(horaInicio)
+                                    && sala.equals(otroHorario.getSala())) {
+                                medico.recibirNotificacion("No se pudo asignar la sala '" + sala.getNombre()
+                                        + "' el " + dia + " a las " + horaInicio + " porque ya está ocupada.");
+                                return false;
+                            }
+                        }
+                    }
+
+
+                    horario.setSala((List<Sala>) sala);
+                    medico.recibirNotificacion("Se te ha asignado la sala '" + sala.getNombre()
+                            + "' el " + dia + " a las " + horaInicio + ".");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public List<HorarioAtencion> obtenerHorariosDeMedico(String idMedico) {
+        Medico medico = buscarMedicoPorId(idMedico);
+        if (medico != null) {
+            return medico.getHorarios();
+        }
+        return new ArrayList<>(); // Lista vacía si no se encuentra el médico
+    }
+
     public boolean eliminarHorarioDeMedico(String idMedico, HorarioAtencion horario) {
         Medico medico = buscarMedicoPorId(idMedico);
         if (medico != null) {
@@ -68,17 +109,6 @@ public class HospitalController {
         return null;
     }
 
-    public List<Sala> getSalas() {
-        return salas;
-    }
-
-    public void registrarPaciente(Paciente paciente) {
-        pacientes.add(paciente);
-    }
-
-    public void registrarMedico(Medico medico) {
-        medicos.add(medico);
-    }
 
     public boolean eliminarPaciente(String correo) {
         return pacientes.removeIf(p -> p.getCorreo().equals(correo));
@@ -174,6 +204,17 @@ public class HospitalController {
         }
 
         return medico.registrarDiagnosticoYTratamiento(cita, diagnostico, tratamiento);
+    }
+    public List<Sala> getSalas() {
+        return salas;
+    }
+
+    public void registrarPaciente(Paciente paciente) {
+        pacientes.add(paciente);
+    }
+
+    public void registrarMedico(Medico medico) {
+        medicos.add(medico);
     }
 
 

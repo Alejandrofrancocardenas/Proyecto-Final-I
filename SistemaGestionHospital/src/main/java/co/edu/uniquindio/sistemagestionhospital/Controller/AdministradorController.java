@@ -1,77 +1,84 @@
-// AdministradorController.java
 package co.edu.uniquindio.sistemagestionhospital.Controller;
 
-import co.edu.uniquindio.sistemagestionhospital.model.Administrador;
-import co.edu.uniquindio.sistemagestionhospital.model.Medico;
-import co.edu.uniquindio.sistemagestionhospital.model.Paciente;
+import co.edu.uniquindio.sistemagestionhospital.model.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdministradorController {
 
-    private List<Administrador> administradores = new ArrayList<>();
-    private List<Paciente> pacientes = new ArrayList<>();
-    private List<Medico> medicos = new ArrayList<>();
+    private Administrador administrador;
+    private HospitalController hospitalController;
 
-    public boolean registrarAdministrador(Administrador admin) {
-        if (buscarAdministrador(admin.getId()) != null) return false;
-        administradores.add(admin);
-        return true;
+    public AdministradorController(Administrador administrador, HospitalController hospitalController) {
+        this.administrador = administrador;
+        this.hospitalController = hospitalController;
     }
 
-    public Administrador buscarAdministrador(String id) {
-        for (Administrador a : administradores) {
-            if (a.getId().equals(id)) return a;
-        }
-        return null;
+    public void registrarPaciente(Paciente paciente) {
+        administrador.registrarPaciente(hospitalController, paciente);
     }
 
-    public boolean registrarPaciente(Paciente paciente) {
-        if (buscarPaciente(paciente.getId()) != null) return false;
-        pacientes.add(paciente);
-        return true;
+    public void registrarMedico(Medico medico) {
+        administrador.registrarMedico(hospitalController, medico);
     }
 
-    public boolean eliminarPaciente(String id) {
-        Paciente p = buscarPaciente(id);
-        return p != null && pacientes.remove(p);
+    public boolean eliminarPaciente(String correo) {
+        return administrador.eliminarPaciente(correo, hospitalController);
     }
 
-    public boolean registrarMedico(Medico medico) {
-        if (buscarMedico(medico.getId()) != null) return false;
-        medicos.add(medico);
-        return true;
+    public boolean eliminarMedico(String correo) {
+        return administrador.eliminarMedico(correo, hospitalController);
     }
 
-    public boolean eliminarMedico(String id) {
-        Medico m = buscarMedico(id);
-        return m != null && medicos.remove(m);
+    public boolean registrarSala(Sala sala) {
+        return administrador.registrarSala(sala);
     }
 
-    public Paciente buscarPaciente(String id) {
-        for (Paciente p : pacientes) {
-            if (p.getId().equals(id)) return p;
-        }
-        return null;
+    public boolean modificarSala(String id, String nuevoNombre, int nuevaCapacidad) {
+        return administrador.modificarSala(id, nuevoNombre, nuevaCapacidad);
     }
 
-    public Medico buscarMedico(String id) {
-        for (Medico m : medicos) {
-            if (m.getId().equals(id)) return m;
-        }
-        return null;
+    public boolean eliminarSala(String id) {
+        return administrador.eliminarSala(id);
+    }
+
+    public boolean asignarHorario(Medico medico, String horario) {
+        return administrador.asignarHorario(medico, horario);
+    }
+
+    public String consultarHorario(Medico medico) {
+        return administrador.consultarHorario(medico);
+    }
+
+    public List<Cita> verDisponibilidadMedico(Medico medico) {
+        return administrador.verDisponibilidadMedico(medico);
+    }
+
+    public boolean asignarCita(Cita cita) {
+        return administrador.asignarCita(hospitalController, cita);
+    }
+
+    public List<String> generarReporteCitas() {
+        return administrador.generarReporteCitas(hospitalController);
+    }
+
+    public long calcularOcupacion() {
+        return administrador.calcularOcupacion(hospitalController);
     }
 
     public List<Paciente> getPacientes() {
-        return pacientes;
+        return hospitalController.getPacientes();
     }
 
     public List<Medico> getMedicos() {
-        return medicos;
+        return hospitalController.getMedicos();
     }
 
-    public List<Administrador> getAdministradores() {
-        return administradores;
+    public List<Sala> getSalas() {
+        return hospitalController.getSalas();
+    }
+
+    public List<Cita> getCitas() {
+        return hospitalController.getCitas();
     }
 }

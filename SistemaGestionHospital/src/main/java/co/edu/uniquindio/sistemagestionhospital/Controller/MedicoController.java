@@ -1,54 +1,62 @@
 package co.edu.uniquindio.sistemagestionhospital.Controller;
 
-import co.edu.uniquindio.sistemagestionhospital.model.Cita;
-import co.edu.uniquindio.sistemagestionhospital.model.HistorialMedico;
-import co.edu.uniquindio.sistemagestionhospital.model.Medico;
+import co.edu.uniquindio.sistemagestionhospital.model.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MedicoController {
 
-    private List<Medico> listaMedicos = new ArrayList<>();
+    private Medico medico;
 
-    public boolean registrarMedico(Medico medico) {
-        if (buscarMedico(medico.getId()) != null) return false;
-        listaMedicos.add(medico);
-        return true;
+    public MedicoController(Medico medico) {
+        this.medico = medico;
     }
 
-    public Medico buscarMedico(String id) {
-        for (Medico m : listaMedicos) {
-            if (m.getId().equals(id)) return m;
-        }
-        return null;
+    public boolean agregarCita(Cita cita) {
+        return medico.agregarCita(cita);
     }
 
-    public boolean eliminarMedico(String id) {
-        Medico m = buscarMedico(id);
-        if (m != null) {
-            listaMedicos.remove(m);
-            return true;
-        }
-        return false;
+    public boolean cancelarCita(Cita cita) {
+        return medico.cancelarCita(cita);
     }
 
-    public boolean agregarCitaAMedico(String idMedico, Cita cita) {
-        Medico m = buscarMedico(idMedico);
-        return m != null && m.agregarCita(cita);
+    public boolean registrarHistorialMedico(Cita cita, String diagnostico, String tratamiento) {
+        return medico.registrarHistorialMedico(cita, diagnostico, tratamiento);
     }
 
-    public boolean cancelarCitaAMedico(String idMedico, Cita cita) {
-        Medico m = buscarMedico(idMedico);
-        return m != null && m.cancelarCita(cita);
+    public boolean registrarDiagnosticoYTratamiento(Cita cita, String diagnostico, String tratamiento) {
+        return medico.registrarDiagnosticoYTratamiento(cita, diagnostico, tratamiento);
     }
 
-    public boolean registrarHistorial(String idMedico, Cita cita, String diagnostico, String tratamiento) {
-        Medico m = buscarMedico(idMedico);
-        return m != null && m.registrarHistorialMedico(cita, diagnostico, tratamiento);
+    public boolean agregarHorario(HorarioAtencion horario) {
+        return medico.agregarHorario(horario);
     }
 
-    public List<Medico> getListaMedicos() {
-        return listaMedicos;
+    public boolean eliminarHorario(HorarioAtencion horario) {
+        return medico.eliminarHorario(horario);
+    }
+
+    public List<HorarioAtencion> getHorarios() {
+        return medico.getHorarios();
+    }
+
+    public List<Cita> getCitas() {
+        return medico.getCitas();
+    }
+
+    public List<String> getNotificaciones() {
+        return medico.getNotificaciones();
+    }
+
+    public String getEspecialidad() {
+        return medico.getEspecialidad();
+    }
+
+    public void recibirNotificacion(String mensaje) {
+        medico.recibirNotificacion(mensaje);
+    }
+
+    public Medico getMedico() {
+        return medico;
     }
 }
