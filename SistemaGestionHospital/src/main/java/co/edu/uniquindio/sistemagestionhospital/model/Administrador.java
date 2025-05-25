@@ -2,12 +2,18 @@ package co.edu.uniquindio.sistemagestionhospital.model;
 import co.edu.uniquindio.sistemagestionhospital.Controller.HospitalController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Administrador extends Usuario {
+    private List<Sala> salas;
+    private Map<Medico, String> horarios; // Ejemplo simple: String como horario
 
     public Administrador(String id,String nombre, String correo, String contrasena) {
         super(nombre, correo, id,contrasena);
+        this.salas = new ArrayList<>();
+        this.horarios = new HashMap<>();
     }
 
     public void registrarPaciente(HospitalController controller, Paciente paciente) {
@@ -35,6 +41,40 @@ public class Administrador extends Usuario {
             }
         }
         return false;
+    }
+    public boolean registrarSala(Sala sala) {
+        if (salas.stream().anyMatch(s -> s.getId().equals(sala.getId()))) {
+            return false;
+        }
+        salas.add(sala);
+        return true;
+    }
+
+    public boolean modificarSala(String id, String nuevoNombre, int nuevaCapacidad) {
+        for (Sala sala : salas) {
+            if (sala.getId().equals(id)) {
+                sala.setNombre(nuevoNombre);
+                sala.setCapacidad(nuevaCapacidad);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean eliminarSala(String id) {
+        return salas.removeIf(sala -> sala.getId().equals(id));
+    }
+
+    public boolean asignarHorario(Medico medico, String horario) {
+        if (medico != null) {
+            horarios.put(medico, horario);
+            return true;
+        }
+        return false;
+    }
+
+    public String consultarHorario(Medico medico) {
+        return horarios.getOrDefault(medico, "No asignado");
     }
 
     public List<Cita> verDisponibilidadMedico(Medico medico) {

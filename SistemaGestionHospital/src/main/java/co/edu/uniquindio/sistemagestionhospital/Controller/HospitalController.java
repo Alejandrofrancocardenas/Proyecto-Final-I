@@ -41,6 +41,38 @@ public class HospitalController {
         cita.getPaciente().agregarCita(cita);
         cita.getMedico().agregarCita(cita);
     }
+    public boolean modificarMedico(String id, String nuevoNombre, String nuevoCorreo, String nuevaContrasena, String nuevaEspecialidad) {
+        Medico medico = buscarMedicoPorId(id);
+        if (medico != null) {
+            medico.setNombre(nuevoNombre);
+            medico.setCorreo(nuevoCorreo);
+            medico.setContrasena(nuevaContrasena);
+            medico.setEspecialidad(nuevaEspecialidad);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean modificarPaciente(String id, String nuevoNombre, String nuevoCorreo, String nuevaContrasena, String nuevaCedula) {
+        Paciente paciente = buscarPacientePorId(id);
+        if (paciente != null) {
+            paciente.setNombre(nuevoNombre);
+            paciente.setCorreo(nuevoCorreo);
+            paciente.setContrasena(nuevaContrasena);
+            paciente.setCedula(nuevaCedula);
+            return true;
+        }
+        return false;
+    }
+
+    public Paciente buscarPacientePorId(String id) {
+        for (Paciente paciente : pacientes) {
+            if (paciente.getId().equals(id)) {
+                return paciente;
+            }
+        }
+        return null;
+    }
 
     public void generarReporteCitas() {
         System.out.println("===== Reporte de Citas =====");
@@ -80,7 +112,7 @@ public class HospitalController {
             return false; // Médico no encontrado
         }
 
-        Cita cita = buscarCitaPorId(idCita); // Suponiendo que tienes un método para buscar citas por ID
+        Cita cita = buscarCitaPorId(idCita);
         if (cita == null || !cita.getMedico().getId().equals(idMedico)) {
             return false; // La cita no existe o no le pertenece al médico
         }

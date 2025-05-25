@@ -67,6 +67,10 @@ public class Paciente extends Usuario implements Notificable {
     public List<Cita> getCitas() {
         return citas;
     }
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
+    }
+
 
     public List<HistorialMedico> getHistoriales() {
         return historiales;
