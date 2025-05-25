@@ -86,4 +86,5 @@ public class Paciente extends Usuario implements Notificable {
     public List<String> getNotificaciones() {
         return notificaciones;
     }
+
 }

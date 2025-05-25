@@ -1,39 +1,38 @@
 package co.edu.uniquindio.sistemagestionhospital.viewController;
 
 import co.edu.uniquindio.sistemagestionhospital.Controller.HospitalController;
+import co.edu.uniquindio.sistemagestionhospital.model.HistorialMedico;
 import co.edu.uniquindio.sistemagestionhospital.model.Paciente;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
+import java.io.IOException;
+import java.util.List;
 
 public class PacienteViewController {
 
-    @FXML
-    private TextField txtId;
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private TextField txtCorreo;
-    @FXML
-    private PasswordField txtContrasena;
-    @FXML
-    private TextField txtCedula;
-    @FXML
-    private TableView<Paciente> tablaPacientes;
-    @FXML
-    private TableColumn<Paciente, String> colId;
-    @FXML
-    private TableColumn<Paciente, String> colNombre;
-    @FXML
-    private TableColumn<Paciente, String> colCorreo;
-    @FXML
-    private TableColumn<Paciente, String> colCedula;
-    @FXML
-    private TableColumn<Paciente, String> colContrasena;
-    @FXML
-    private Label lblMensaje;
+    @FXML private TextField txtId;
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtCorreo;
+    @FXML private PasswordField txtContrasena;
+    @FXML private TextField txtCedula;
+    @FXML private TableView<Paciente> tablaPacientes;
+    @FXML private TableColumn<Paciente, String> colId;
+    @FXML private TableColumn<Paciente, String> colNombre;
+    @FXML private TableColumn<Paciente, String> colCorreo;
+    @FXML private TableColumn<Paciente, String> colCedula;
+    @FXML private TableColumn<Paciente, String> colContrasena;
+    @FXML private Label lblMensaje;
+
+    // Nuevos botones
+    @FXML private Button btnGestionarCitas;
+    @FXML private Button btnVerHistorial;
 
     private final HospitalController controlador = HospitalController.getInstance();
     private final ObservableList<Paciente> listaPacientes = FXCollections.observableArrayList();
@@ -50,7 +49,12 @@ public class PacienteViewController {
         actualizarTabla();
 
         tablaPacientes.getSelectionModel().selectedItemProperty().addListener(
-                (obs, oldSelection, newSelection) -> mostrarDatosPacienteSeleccionado(newSelection)
+                (obs, oldSelection, newSelection) -> {
+                    mostrarDatosPacienteSeleccionado(newSelection);
+                    if (newSelection != null) {
+                        mostrarNotificaciones(newSelection);
+                    }
+                }
         );
     }
 
@@ -150,5 +154,78 @@ public class PacienteViewController {
     private void mostrarMensaje(String mensaje, boolean esError) {
         lblMensaje.setText(mensaje);
         lblMensaje.setStyle("-fx-text-fill: " + (esError ? "red;" : "green;"));
+    }
+
+    // 🔹 NUEVO: mostrar notificaciones del paciente seleccionado
+    private void mostrarNotificaciones(Paciente paciente) {
+        List<String> notificaciones = paciente.getNotificaciones();
+
+        if (!notificaciones.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            for (String n : notificaciones) {
+                sb.append("- ").append(n).append("\n");
+            }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Notificaciones");
+            alert.setHeaderText("Notificaciones para " + paciente.getNombre());
+            alert.setContentText(sb.toString());
+            alert.showAndWait();
+
+            notificaciones.clear(); // Vaciar después de mostrarlas
+        }
+    }
+
+    // 🔹 NUEVO: abrir vista para gestionar citas
+    @FXML
+    private void gestionarCitas() {
+        Paciente pacienteSeleccionado = tablaPacientes.getSelectionModel().getSelectedItem();
+        if (pacienteSeleccionado == null) {
+            mostrarMensaje("Selecciona un paciente para gestionar sus citas.", true);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CitaView.fxml"));
+            Parent root = loader.load();
+
+            // Pasar paciente si lo necesitas
+            // CitaViewController controller = loader.getController();
+            // controller.setPaciente(pacienteSeleccionado);
+
+            Stage stage = new Stage();
+            stage.setTitle("Gestión de Citas");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 🔹 NUEVO: mostrar historial médico en ventana emergente
+    @FXML
+    private void verHistorialMedico() {
+        Paciente pacienteSeleccionado = tablaPacientes.getSelectionModel().getSelectedItem();
+        if (pacienteSeleccionado == null) {
+            mostrarMensaje("Selecciona un paciente para ver su historial médico.", true);
+            return;
+        }
+
+        List<HistorialMedico> historial = pacienteSeleccionado.getHistoriales();
+        if (historial.isEmpty()) {
+            mostrarMensaje("El historial médico está vacío.", true);
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (HistorialMedico entrada : historial) {
+            sb.append("- ").append(entrada).append("\n");
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Historial Médico");
+        alert.setHeaderText("Historial de " + pacienteSeleccionado.getNombre());
+        alert.setContentText(sb.toString());
+        alert.showAndWait();
     }
 }

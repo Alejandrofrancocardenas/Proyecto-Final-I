@@ -21,9 +21,9 @@
             <padding>
                 <Insets top="20" right="20" bottom="20" left="20"/>
             </padding>
-
-            <Button text="Gestión de Pacientes" onAction="#gestionarPacientes" prefWidth="200"/>
-            <Button text="Gestión de Médicos" prefWidth="200"/>
+            <Button text="Gestiones de Administrador" prefWidth="200"/>
+            <Button text="Gestiónes de Pacientes" onAction="#gestionarPacientes" prefWidth="200"/>
+            <Button text="Gestiónes de Médicos" prefWidth="200"/>
             <Button text="Gestión de Citas" prefWidth="200"/>
             <Button text="Cerrar Sesión" prefWidth="200"/>
         </VBox>

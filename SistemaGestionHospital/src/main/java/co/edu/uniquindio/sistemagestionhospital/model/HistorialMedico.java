@@ -1,7 +1,9 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
-public class HistorialMedico {
+import java.time.LocalDate;
 
+public class HistorialMedico {
+    private LocalDate fecha;
     private String diagnostico;
     private String tratamiento;
     private Medico medico;
@@ -12,6 +14,13 @@ public class HistorialMedico {
         this.tratamiento = tratamiento;
         this.medico = medico;
         this.paciente = paciente;
+        this.fecha = LocalDate.now();
+    }
+    public LocalDate getFecha() {
+        return fecha;
+    }
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
     }
     public Paciente getPaciente(){
         return paciente;
@@ -40,5 +49,10 @@ public class HistorialMedico {
 
     public void setTratamiento(String tratamiento) {
         this.tratamiento = tratamiento;
+    }
+
+    @Override
+    public String toString() {
+        return "Fecha: " + fecha + ", Diagnostico: " + diagnostico + ", Tratamiento: " + tratamiento;
     }
 }
