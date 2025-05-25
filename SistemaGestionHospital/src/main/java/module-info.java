@@ -1,6 +1,7 @@
 module co.edu.uniquindio.sistemagestionhospital {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
     opens co.edu.uniquindio.sistemagestionhospital.viewController to javafx.fxml;
     opens co.edu.uniquindio.sistemagestionhospital to javafx.fxml;

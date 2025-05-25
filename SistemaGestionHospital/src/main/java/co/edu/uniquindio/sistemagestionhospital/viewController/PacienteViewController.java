@@ -1,7 +1,9 @@
 package co.edu.uniquindio.sistemagestionhospital.viewController;
 
 import co.edu.uniquindio.sistemagestionhospital.Controller.HospitalController;
+import co.edu.uniquindio.sistemagestionhospital.model.Cita;
 import co.edu.uniquindio.sistemagestionhospital.model.HistorialMedico;
+import co.edu.uniquindio.sistemagestionhospital.model.Medico;
 import co.edu.uniquindio.sistemagestionhospital.model.Paciente;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,27 +14,55 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class PacienteViewController {
 
-    @FXML private TextField txtId;
-    @FXML private TextField txtNombre;
-    @FXML private TextField txtCorreo;
-    @FXML private PasswordField txtContrasena;
-    @FXML private TextField txtCedula;
-    @FXML private TableView<Paciente> tablaPacientes;
-    @FXML private TableColumn<Paciente, String> colId;
-    @FXML private TableColumn<Paciente, String> colNombre;
-    @FXML private TableColumn<Paciente, String> colCorreo;
-    @FXML private TableColumn<Paciente, String> colCedula;
-    @FXML private TableColumn<Paciente, String> colContrasena;
-    @FXML private Label lblMensaje;
+    @FXML
+    private TextField txtId;
+    @FXML
+    private TextField txtNombre;
+    @FXML
+    private TextField txtCorreo;
+    @FXML
+    private PasswordField txtContrasena;
+    @FXML
+    private TextField txtCedula;
+    @FXML
+    private TableView<Paciente> tablaPacientes;
+    @FXML
+    private TableColumn<Paciente, String> colId;
+    @FXML
+    private TableColumn<Paciente, String> colNombre;
+    @FXML
+    private TableColumn<Paciente, String> colCorreo;
+    @FXML
+    private TableColumn<Paciente, String> colCedula;
+    @FXML
+    private TableColumn<Paciente, String> colContrasena;
+    @FXML
+    private Label lblMensaje;
+    @FXML
+    private TextField txtFecha;
+
+    @FXML
+    private TextField txtHora;
+
+    @FXML
+    private TextField txtMotivo;
 
     // Nuevos botones
-    @FXML private Button btnGestionarCitas;
-    @FXML private Button btnVerHistorial;
+    @FXML
+    private Button btnGestionarCitas;
+    @FXML
+    private Button btnVerHistorial;
 
     private final HospitalController controlador = HospitalController.getInstance();
     private final ObservableList<Paciente> listaPacientes = FXCollections.observableArrayList();
@@ -228,4 +258,78 @@ public class PacienteViewController {
         alert.setContentText(sb.toString());
         alert.showAndWait();
     }
+
+    @FXML
+    private void abrirVentanaCitas() {
+        Paciente pacienteSeleccionado = tablaPacientes.getSelectionModel().getSelectedItem();
+        if (pacienteSeleccionado == null) {
+            mostrarMensaje("Selecciona un paciente para gestionar sus citas.", true);
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/sistemagestionhospital/view/CitaView.fxml"));
+            Parent root = loader.load();
+
+            CitaViewController controladorCita = loader.getController();
+            controladorCita.setPaciente(pacienteSeleccionado);
+
+            Stage stage = new Stage();
+            stage.setTitle("Gestión de Citas");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (IOException e) {
+            mostrarMensaje("No se pudo abrir la ventana de citas.", true);
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void agendarCita(Paciente paciente, Medico medico, LocalDate fecha, LocalTime hora) {
+        String fechaStr = txtFecha.getText();
+        String horaStr = txtHora.getText();
+        String motivo = txtMotivo.getText();
+
+        if (fechaStr.isBlank() || horaStr.isBlank() || motivo.isBlank()) {
+            mostrarMensaje("Completa todos los campos.", true);
+            return;
+        }
+
+        try {
+            fecha = LocalDate.parse(fechaStr);
+            hora = LocalTime.parse(horaStr);
+
+            LocalDateTime fechaHora = LocalDateTime.of(fecha, hora);
+            if (fechaHora.isBefore(LocalDateTime.now())) {
+                mostrarMensaje("No se puede agendar una cita en el pasado.", true);
+                return;
+            }
+
+            Cita nuevaCita = new Cita(paciente, medico, fecha, hora);
+
+            if (paciente.agregarCita(nuevaCita)) {
+                mostrarMensaje("Cita agendada exitosamente.", false);
+                actualizarListaCitas(paciente);
+                limpiarCampos();
+            } else {
+                mostrarMensaje("Ya existe una cita en ese horario.", true);
+            }
+        } catch (Exception e) {
+            mostrarMensaje("Formato incorrecto. Usa YYYY-MM-DD y HH:MM", true);
+        }
+    }
+
+    private void actualizarListaCitas(Paciente paciente) {
+        listaCitas.getItems().clear();
+        List<Cita> citasOrdenadas = new ArrayList<>(paciente.getCitas());
+        citasOrdenadas.sort(Comparator.comparing(Cita::getFecha).thenComparing(Cita::getHora));
+        for (Cita cita : citasOrdenadas) {
+            listaCitas.getItems().add(cita.toString());
+        }
+    }
+
+    @FXML
+    private ListView<String> listaCitas;
+
 }
