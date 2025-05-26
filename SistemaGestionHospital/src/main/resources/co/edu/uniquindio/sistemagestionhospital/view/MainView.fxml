@@ -14,7 +14,7 @@
         <Insets top="40" right="20" bottom="40" left="20"/>
     </padding>
 
-    <Button fx:id="btnPacientes" text="Gestionar Pacientes" onAction="#gestionarPacientes"/>
+    <Button fx:id="btnPacientes" text="Gestionar Pacientes" onAction="#abrirGestionPacientes"/>
     <Button fx:id="btnMedicos" text="Gestionar Médicos" onAction="#gestionarMedicos"/>
     <Button fx:id="btnCerrarSesion" text="Cerrar Sesión" onAction="#cerrarSesion"/>
 

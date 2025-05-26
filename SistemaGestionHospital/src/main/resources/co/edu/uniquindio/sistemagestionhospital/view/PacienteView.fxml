@@ -49,7 +49,7 @@
                 <Button text="Eliminar" onAction="#eliminarPaciente"/>
                 <Button text="Limpiar" onAction="#limpiarCampos"/>
                 <Button fx:id="btnGestionarCitas" text="Gestionar Citas" onAction="#abrirVentanaCitas"/>
-
+                <Button text="Ver Historial Médico" onAction="#verHistorialMedico"/>
 
             </HBox>
 

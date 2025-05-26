@@ -8,28 +8,38 @@ public class HistorialMedico {
     private String tratamiento;
     private Medico medico;
     private Paciente paciente;
+    private String descripcion;
 
-    public HistorialMedico(Medico medico, Paciente paciente, String diagnostico, String tratamiento) {
+    public HistorialMedico(String diagnostico, String tratamiento, Medico medico, Paciente paciente, String descripcion) {
         this.diagnostico = diagnostico;
         this.tratamiento = tratamiento;
         this.medico = medico;
         this.paciente = paciente;
+        this.descripcion = descripcion;
         this.fecha = LocalDate.now();
     }
+
     public LocalDate getFecha() {
         return fecha;
     }
+
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    public void setPaciente(Paciente paciente){
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
-    public Medico getMedico(){
+
+    public Medico getMedico() {
         return medico;
     }
-    public void setMedico(Medico medico){
+
+    public void setMedico(Medico medico) {
         this.medico = medico;
     }
 
@@ -47,6 +57,14 @@ public class HistorialMedico {
 
     public void setTratamiento(String tratamiento) {
         this.tratamiento = tratamiento;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     @Override

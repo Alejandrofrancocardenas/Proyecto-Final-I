@@ -29,7 +29,6 @@ public class HospitalController {
         return instancia;
     }
 
-    // === PACIENTES ===
 
     public boolean registrarPaciente(Paciente paciente) {
         if (buscarPacientePorId(paciente.getId()) != null) return false;
@@ -63,9 +62,6 @@ public class HospitalController {
     public ArrayList<Paciente> getPacientes() {
         return pacientes;
     }
-
-    // === MÉDICOS ===
-
     public boolean registrarMedico(Medico medico) {
         if (buscarMedicoPorId(medico.getId()) != null) return false;
         medicos.add(medico);
@@ -99,7 +95,7 @@ public class HospitalController {
         return medicos;
     }
 
-    // === CITAS ===
+
 
     public void asignarCita(Cita cita) {
         citas.add(cita);

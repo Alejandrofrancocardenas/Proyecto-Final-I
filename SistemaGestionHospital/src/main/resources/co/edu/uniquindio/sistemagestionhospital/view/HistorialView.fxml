@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.HistorialViewController"
+            prefWidth="600" prefHeight="400">
+
+    <VBox spacing="10" padding="20">
+        <Label text="Historial Médico del Paciente" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+
+        <ListView fx:id="listaHistorial" prefHeight="250" />
+
+        <HBox spacing="10">
+            <TextField fx:id="txtDiagnostico" promptText="Diagnóstico" />
+            <TextField fx:id="txtTratamiento" promptText="Tratamiento" />
+            <TextField fx:id="txtDescripcion" promptText="Descripción" />
+            <Button text="Agregar Entrada" onAction="#agregarHistorial" />
+        </HBox>
+    </VBox>
+
+</AnchorPane>

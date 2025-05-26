@@ -1,21 +1,28 @@
 package co.edu.uniquindio.sistemagestionhospital.viewController;
 
-import co.edu.uniquindio.sistemagestionhospital.model.Cita;
-import co.edu.uniquindio.sistemagestionhospital.model.HistorialMedico;
-import co.edu.uniquindio.sistemagestionhospital.model.Medico;
-import co.edu.uniquindio.sistemagestionhospital.model.Paciente;
+import co.edu.uniquindio.sistemagestionhospital.model.*;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.util.StringConverter;
+
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Comparator;
+import java.util.ResourceBundle;
 
-public class CitaViewController {
+public class CitaViewController implements Initializable {
 
-    private Paciente paciente;
+    @FXML
+    private ComboBox<Medico> cbMedico;
+
+    @FXML
+    private ComboBox<Paciente> cbPaciente;
 
     @FXML
     private TextField txtFecha;
@@ -26,56 +33,69 @@ public class CitaViewController {
     @FXML
     private ListView<Cita> listaCitas;
 
-    @FXML
-    private ComboBox<Medico> comboMedicos;
-    @FXML
-    private ListView<String> listaHistorial;
-    @FXML
-    private TextField txtNuevaEntradaHistorial;
+    private final Hospital hospital = Hospital.getInstance();
+    private Paciente paciente;
+    private Medico medicoActual;
 
-    private void actualizarHistorialMedico() {
-        listaHistorial.getItems().clear();
-        paciente.getHistoriales().forEach(historial ->
-                listaHistorial.getItems().add(historial.toString())
-        );
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        cargarPacientesYMedicos();
+
+        cbPaciente.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Paciente paciente) {
+                return paciente != null ? paciente.getNombre() + " (" + paciente.getId() + ")" : "";
+            }
+
+            @Override
+            public Paciente fromString(String string) {
+                return null;
+            }
+        });
+
+        cbMedico.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Medico medico) {
+                return medico != null ? medico.getNombre() + " (" + medico.getId() + ")" : "";
+            }
+
+            @Override
+            public Medico fromString(String string) {
+                return null;
+            }
+        });
+
+        cbPaciente.setOnAction(event -> {
+            Paciente seleccionado = cbPaciente.getValue();
+            if (seleccionado != null) {
+                this.paciente = seleccionado;
+                actualizarListaCitas();
+            }
+        });
     }
-    @FXML
 
-    private void agregarHistorialMedico(Medico medico,Paciente paciente,String diagnostico,String tratamiento) {
-        String entrada = txtNuevaEntradaHistorial.getText();
-        if (entrada == null || entrada.isBlank()) {
-            mostrarMensaje("La entrada no puede estar vacía.", true);
-            return;
-        }
-
-        HistorialMedico nuevoHistorial = new HistorialMedico(medico,paciente,diagnostico,tratamiento);
-        paciente.getHistoriales().add(nuevoHistorial);
-        txtNuevaEntradaHistorial.clear();
-        actualizarHistorialMedico();
-        mostrarMensaje("Entrada añadida al historial médico.", false);
-    }
-
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-        actualizarListaCitas();
+    private void cargarPacientesYMedicos() {
+        cbPaciente.setItems(FXCollections.observableArrayList(hospital.getListaPacientes()));
+        cbMedico.setItems(FXCollections.observableArrayList(hospital.getListaMedicos()));
     }
 
     private void actualizarListaCitas() {
         listaCitas.getItems().clear();
-        paciente.getCitas().stream()
-                .sorted(Comparator.comparing(Cita::getFecha).thenComparing(Cita::getHora))
-                .forEach(cita -> listaCitas.getItems().add(cita));
+        if (paciente != null) {
+            paciente.getCitas().stream()
+                    .sorted(Comparator.comparing(Cita::getFecha).thenComparing(Cita::getHora))
+                    .forEach(listaCitas.getItems()::add);
+        }
     }
-
 
     @FXML
     private void agendarCita() {
-        Medico medico = comboMedicos.getValue();
+        Medico medico = cbMedico.getValue();
         String fechaTexto = txtFecha.getText();
         String horaTexto = txtHora.getText();
 
-        if (medico == null || fechaTexto.isBlank() || horaTexto.isBlank()) {
-            mostrarMensaje("Completa todos los campos.", true);
+        if (paciente == null || medico == null || fechaTexto.isBlank() || horaTexto.isBlank()) {
+            mostrarMensaje("Completa todos los campos y selecciona un paciente.", true);
             return;
         }
 
@@ -98,15 +118,29 @@ public class CitaViewController {
     @FXML
     private void cancelarCita() {
         Cita seleccionada = listaCitas.getSelectionModel().getSelectedItem();
-        if (seleccionada == null) return;
-
-        paciente.cancelarCita(seleccionada);
-        actualizarListaCitas();
+        if (seleccionada != null && paciente != null) {
+            paciente.cancelarCita(seleccionada);
+            actualizarListaCitas();
+        }
     }
 
     private void mostrarMensaje(String mensaje, boolean esError) {
         Alert alert = new Alert(esError ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    public void setMedico(Medico medico) {
+        this.medicoActual = medico;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+        cbPaciente.setValue(paciente); // para que se muestre en el ComboBox
+        actualizarListaCitas();
+    }
+
+    private Medico obtenerMedicoActual() {
+        return this.medicoActual;
     }
 }

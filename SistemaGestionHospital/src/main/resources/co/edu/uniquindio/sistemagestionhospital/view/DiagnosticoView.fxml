@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.DiagnosticoViewController"
+      alignment="CENTER" padding="20">
+    <Label text="Registrar Diagnóstico y Tratamiento" style="-fx-font-size: 18px;"/>
+
+    <ListView fx:id="listaCitas" prefHeight="150"/>
+
+    <Label text="Diagnóstico:"/>
+    <TextArea fx:id="txtDiagnostico" prefRowCount="3"/>
+
+    <Label text="Tratamiento:"/>
+    <TextArea fx:id="txtTratamiento" prefRowCount="3"/>
+
+    <Button text="Guardar" onAction="#guardarDiagnosticoTratamiento"/>
+</VBox>

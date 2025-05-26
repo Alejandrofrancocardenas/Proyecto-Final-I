@@ -23,7 +23,7 @@ public class Paciente extends Usuario implements Notificable {
 
     @Override
     public void mostrarMenu() {
-        // Implementación futura si se necesita
+
     }
 
     public void actualizarDatos(String nuevoNombre, String nuevoCorreo, String nuevaContrasena) {
@@ -62,7 +62,7 @@ public class Paciente extends Usuario implements Notificable {
         notificaciones.add(mensaje);
     }
 
-    // Getters y Setters para propiedades
+
     public String getCedula() {
         return cedula.get();
     }
@@ -85,6 +85,10 @@ public class Paciente extends Usuario implements Notificable {
 
     public List<String> getNotificaciones() {
         return notificaciones;
+    }
+    @Override
+    public String toString() {
+        return nombre + " (" + id + ")";
     }
 
 }

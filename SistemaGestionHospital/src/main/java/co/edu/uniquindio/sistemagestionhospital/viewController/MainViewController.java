@@ -1,5 +1,7 @@
 package co.edu.uniquindio.sistemagestionhospital.viewController;
 
+import co.edu.uniquindio.sistemagestionhospital.Controller.DashboardController;
+import co.edu.uniquindio.sistemagestionhospital.model.Hospital;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,8 +23,9 @@ public class MainViewController {
     @FXML
     private Button btnCerrarSesion;
 
+
     @FXML
-    private void gestionarPacientes(ActionEvent event) {
+    private void abrirGestionPacientes() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/sistemagestionhospital/view/PacienteView.fxml"));
             Parent root = loader.load();
@@ -33,13 +36,9 @@ public class MainViewController {
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
-            alert.setTitle("Error al cargar la vista");
-            alert.setHeaderText("No se pudo abrir la vista de pacientes.");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
         }
     }
+
 
 
     @FXML
@@ -57,6 +56,5 @@ public class MainViewController {
         System.out.println("Sesión cerrada");
         System.exit(0); // Cierra la app
     }
-
 
 }

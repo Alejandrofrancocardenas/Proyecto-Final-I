@@ -58,7 +58,9 @@ public class Medico extends Usuario implements Notificable {
             return false;
         }
 
-        HistorialMedico historial = new HistorialMedico(this, cita.getPaciente(), diagnostico, tratamiento);
+        HistorialMedico historial = new HistorialMedico(diagnostico, tratamiento, this, cita.getPaciente(), "Historial generado a partir de la cita.");
+
+
         cita.setEstado(EstadoCita.COMPLETADA);
         cita.setHistorialMedico(historial);
         return true;
@@ -69,7 +71,8 @@ public class Medico extends Usuario implements Notificable {
             return false; // El médico no tiene esta cita
         }
 
-        HistorialMedico historial = new HistorialMedico(this, cita.getPaciente(), diagnostico, tratamiento);
+        HistorialMedico historial = new HistorialMedico(diagnostico, tratamiento, this, cita.getPaciente(), "Historial generado a partir de la cita.");
+
         cita.setHistorialMedico(historial);
         cita.setEstado(EstadoCita.COMPLETADA);
         cita.getPaciente().agregarHistorial(historial);
@@ -98,4 +101,9 @@ public class Medico extends Usuario implements Notificable {
     public ArrayList<String> getNotificaciones() {
         return notificaciones;
     }
+    @Override
+    public String toString() {
+        return nombre + " - " + especialidad;
+    }
+
 }
