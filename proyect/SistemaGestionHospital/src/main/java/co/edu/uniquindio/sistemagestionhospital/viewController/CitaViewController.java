@@ -199,7 +199,6 @@ public class CitaViewController implements Initializable {
                 return;
             }
 
-            // Lógica de confirmación (opcional pero recomendada)
             Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
             confirmacion.setTitle("Confirmar Cancelación");
             confirmacion.setHeaderText("¿Está seguro de que desea cancelar esta cita?");
@@ -252,7 +251,7 @@ public class CitaViewController implements Initializable {
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
-        cbPaciente.setValue(paciente); // para que se muestre en el ComboBox
+        cbPaciente.setValue(paciente);
         actualizarListaCitas();
     }
 

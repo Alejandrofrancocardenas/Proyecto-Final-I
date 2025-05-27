@@ -55,7 +55,6 @@ public class HistorialPacienteController {
                 sb.append("Tratamiento: ").append(entradaIndividual.getTratamiento() != null ? entradaIndividual.getTratamiento() : "N/A").append("\n\n");
             }
         }
-        // --- FIN DE LA CORRECCIÓN ---
 
         txtHistorial.setText(sb.toString());
     }
