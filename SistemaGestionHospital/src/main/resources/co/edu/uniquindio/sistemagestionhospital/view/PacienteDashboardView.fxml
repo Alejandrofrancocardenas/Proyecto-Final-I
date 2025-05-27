@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.PacienteDashboardController"
+            prefHeight="600.0" prefWidth="900.0">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="Citas">
+                    <MenuItem text="Ver Mis Citas" onAction="#verMisCitas"/>
+                    <MenuItem text="Solicitar Nueva Cita" onAction="#solicitarNuevaCita"/>
+                </Menu>
+                <Menu text="Mi Salud">
+                    <MenuItem text="Ver Mi Historial Médico" onAction="#verMiHistorialMedico"/>
+                </Menu>
+                <Menu text="Mi Cuenta">
+                    <MenuItem text="Ver Mis Notificaciones" onAction="#verMisNotificaciones"/>
+                    <MenuItem text="Actualizar Mis Datos" onAction="#actualizarMisDatos"/>
+                    <MenuItem fx:id="menuCerrarSesion" text="Cerrar Sesión" onAction="#cerrarSesion"/>
+                </Menu>
+            </MenuBar>
+            <Label fx:id="lblBienvenidaPaciente" text="Panel de Paciente"
+                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 10;"
+                   alignment="CENTER" maxWidth="Infinity"/>
+        </VBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="contenedorPrincipalPaciente" BorderPane.alignment="CENTER" style="-fx-background-color: #f0f0f0;">
+            <Label text="Seleccione una opción del menú para comenzar." style="-fx-font-size: 16px; -fx-text-fill: grey;"/>
+        </StackPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 10; -fx-background-color: #e0e0e0; -fx-border-color: lightgray; -fx-border-width: 1 0 0 0;">
+            <padding>
+                <Insets right="20.0"/>
+            </padding>
+            <Label fx:id="lblInfoUsuarioPaciente" text="Paciente: Cargando..."/>
+            <Label fx:id="lblFechaHoraPaciente" text="Fecha y Hora: Cargando..."/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

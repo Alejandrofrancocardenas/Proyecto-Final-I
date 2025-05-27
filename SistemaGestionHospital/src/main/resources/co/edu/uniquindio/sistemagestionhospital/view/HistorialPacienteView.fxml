@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.HistorialPacienteController">
+
+    <top>
+        <Label text="Historial Médico del Paciente" style="-fx-font-size: 18px;" BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <TextArea fx:id="txtHistorial" editable="false" wrapText="true">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+        </TextArea>
+    </center>
+
+</BorderPane>

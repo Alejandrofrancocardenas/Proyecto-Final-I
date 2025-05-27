@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.time.DayOfWeek?> <?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.HorarioViewController"
+      alignment="TOP_CENTER" spacing="15" style="-fx-padding: 20px;">
+
+    <Label text="Gestionar Mis Horarios de Atención"
+           style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 0 0 15 0;"/>
+
+    <GridPane hgap="10" vgap="10" maxWidth="400">
+        <Label text="Día de la Semana:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbDia" prefWidth="220.0" promptText="Seleccione un día" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Hora de Inicio (HH:mm):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtHoraInicio" promptText="Ej: 09:00" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Hora de Fin (HH:mm):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtHoraFin" promptText="Ej: 17:30" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="150.0"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+    </GridPane>
+
+    <Button text="Agregar Nuevo Horario" onAction="#agregarHorario" prefWidth="200.0"
+            style="-fx-background-color: #abe3ae; -fx-text-fill: white; -fx-font-size: 14px;"/>
+
+    <Separator prefWidth="400" style="-fx-padding: 10 0 10 0;"/>
+
+    <Label text="Mis Horarios Actuales:"
+           style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 5 0 5 0;"/>
+
+    <ListView fx:id="listaHorarios" prefHeight="200.0" prefWidth="400.0"/>
+
+    <Button text="Eliminar Horario Seleccionado" onAction="#eliminarHorario" prefWidth="200.0"
+            style="-fx-background-color: #f5837c; -fx-text-fill: white; -fx-font-size: 14px;"/>
+
+</VBox>

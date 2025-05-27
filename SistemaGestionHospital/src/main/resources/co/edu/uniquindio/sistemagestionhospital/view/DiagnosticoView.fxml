@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.DiagnosticoViewController"
-      alignment="CENTER" padding="20">
-    <Label text="Registrar Diagnóstico y Tratamiento" style="-fx-font-size: 18px;"/>
+<VBox spacing="10" padding="20" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.DiagnosticoViewController">
 
-    <ListView fx:id="listaCitas" prefHeight="150"/>
+    <Label text="Seleccionar Cita Pendiente:"/>
+    <ComboBox fx:id="comboCitas" prefWidth="300"/>
 
     <Label text="Diagnóstico:"/>
     <TextArea fx:id="txtDiagnostico" prefRowCount="3"/>
@@ -16,5 +17,11 @@
     <Label text="Tratamiento:"/>
     <TextArea fx:id="txtTratamiento" prefRowCount="3"/>
 
-    <Button text="Guardar" onAction="#guardarDiagnosticoTratamiento"/>
+    <HBox spacing="10">
+        <Button text="Registrar" onAction="#registrarDiagnostico"/>
+        <Button text="Cancelar" onAction="#cerrarVentana"/>
+    </HBox>
+
+    <Label fx:id="lblMensaje" textFill="green"/>
+
 </VBox>

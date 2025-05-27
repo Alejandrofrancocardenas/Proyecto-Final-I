@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.ActualizarDatosPacienteController"
+      spacing="15" alignment="CENTER" style="-fx-padding: 30;">
+    <Label text="Actualizar Mis Datos Personales" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="10" maxWidth="400">
+        <Label text="Nombre Completo:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNombre" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Correo Electrónico:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtCorreo" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Nueva Contraseña:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="txtNuevaContrasena" promptText="Dejar vacío para no cambiar" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Confirmar Contraseña:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="txtConfirmarContrasena" promptText="Repetir nueva contraseña" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="140"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+        <Button text="Guardar Cambios" onAction="#handleGuardarCambios" style="-fx-base: #4CAF50;"/>
+        <Button text="Cancelar" onAction="#handleCancelar"/>
+    </HBox>
+    <Label fx:id="lblMensaje" style="-fx-text-fill: red;"/>
+</VBox>

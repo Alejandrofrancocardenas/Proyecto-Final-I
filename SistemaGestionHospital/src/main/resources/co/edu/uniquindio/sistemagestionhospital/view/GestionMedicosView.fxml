@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.GestionMedicosController"
+      spacing="15" alignment="TOP_CENTER" style="-fx-padding: 20;">
+
+    <Label text="Gestión de Médicos del Hospital" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 0 0 10 0;"/>
+
+    <TableView fx:id="tablaMedicos" prefHeight="250.0">
+        <columns>
+            <TableColumn fx:id="colIdMedico" prefWidth="100.0" text="ID Médico"/>
+            <TableColumn fx:id="colNombreMedico" prefWidth="200.0" text="Nombre Completo"/>
+            <TableColumn fx:id="colEspecialidadMedico" prefWidth="150.0" text="Especialidad"/>
+            <TableColumn fx:id="colCorreoMedico" prefWidth="200.0" text="Correo Electrónico"/>
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+    </TableView>
+
+    <Label text="Datos del Médico" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10 0 5 0;"/>
+    <GridPane hgap="10" vgap="10" maxWidth="600">
+        <padding><Insets top="10" bottom="10" left="10" right="10"/></padding>
+
+        <Label text="ID Médico:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtIdMedico" promptText="ID (autogenerado si vacío)" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Nombre Completo:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNombreMedico" promptText="Nombre del médico" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Correo Electrónico:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtCorreoMedico" promptText="ejemplo@hospital.com" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Contraseña:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="txtContrasenaMedico" promptText="Dejar vacío para no cambiar" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Especialidad:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtEspecialidadMedico" promptText="Especialidad del médico" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" minWidth="120"/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 15 0 0 0;">
+        <Button fx:id="btnAgregarMedico" text="Agregar Médico" onAction="#handleAgregarMedico" style="-fx-base: #abe3ae;"/>
+        <Button fx:id="btnActualizarMedico" text="Actualizar Médico" onAction="#handleActualizarMedico" style="-fx-base: #7dbcf1;" disable="true"/>
+        <Button fx:id="btnEliminarMedico" text="Eliminar Médico" onAction="#handleEliminarMedico" style="-fx-base: #f5837c;" disable="true"/>
+        <Button fx:id="btnLimpiarCampos" text="Limpiar Campos" onAction="#handleLimpiarCampos"/>
+    </HBox>
+
+</VBox>

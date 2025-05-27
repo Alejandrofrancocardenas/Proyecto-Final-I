@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.GestionHorariosController"
+      spacing="10" alignment="TOP_CENTER" style="-fx-padding: 20;">
+
+    <Label text="Gestión de Horarios de Médicos" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Seleccionar Médico:"/>
+        <ComboBox fx:id="comboMedicosHorario" prefWidth="250"/>
+    </HBox>
+
+    <Label text="Horarios del Médico Seleccionado:" style="-fx-font-weight: bold; margin-top: 10px;"/>
+    <ListView fx:id="listaHorariosMedico" prefHeight="150"/>
+
+    <Label text="Agregar/Modificar Horario:" style="-fx-font-weight: bold; margin-top: 10px;"/>
+    <GridPane hgap="10" vgap="10" alignment="CENTER">
+        <padding><Insets top="10" bottom="10" left="10" right="10"/></padding>
+        <Label text="Día:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbDiaHorario" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="150"/>
+
+        <Label text="Hora Inicio (HH:mm):" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtHoraInicioHorario" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Hora Fin (HH:mm):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtHoraFinHorario" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT"/>
+            <ColumnConstraints hgrow="ALWAYS" prefWidth="150"/>
+        </columnConstraints>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Agregar Horario" onAction="#handleAgregarHorarioMedico"/>
+        <Button fx:id="btnEliminarHorarioSeleccionado" text="Eliminar Seleccionado" onAction="#handleEliminarHorarioSeleccionado" disable="true"/>
+        <Button text="Limpiar Campos" onAction="#handleLimpiarCamposFormHorario"/>
+    </HBox>
+
+</VBox>

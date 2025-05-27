@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.GestionCitasController"
+      spacing="10" alignment="TOP_CENTER" style="-fx-padding: 20;">
+
+    <Label text="Gestión de Citas del Sistema" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Filtrar por Fecha:"/>
+        <DatePicker fx:id="dpFiltroFechaCita"/>
+        <Label text="Filtrar por Médico:"/>
+        <ComboBox fx:id="comboFiltroMedicoCita" prefWidth="150"/>
+        <Label text="Filtrar por Paciente:"/>
+        <ComboBox fx:id="comboFiltroPacienteCita" prefWidth="150"/>
+        <Button text="Aplicar Filtros" onAction="#handleAplicarFiltrosCitas"/>
+        <Button text="Limpiar Filtros" onAction="#handleLimpiarFiltrosCitas"/>
+    </HBox>
+
+    <TableView fx:id="tablaCitas" prefHeight="300.0">
+        <columns>
+            <TableColumn fx:id="colIdCita" text="ID Cita"/>
+            <TableColumn fx:id="colFechaCita" text="Fecha"/>
+            <TableColumn fx:id="colHoraCita" text="Hora"/>
+            <TableColumn fx:id="colPacienteCita" text="Paciente"/>
+            <TableColumn fx:id="colMedicoCita" text="Médico"/>
+            <TableColumn fx:id="colEspecialidadCita" text="Especialidad"/>
+            <TableColumn fx:id="colEstadoCita" text="Estado"/>
+            <TableColumn fx:id="colMotivoCita" prefWidth="150.0" text="Motivo"/>
+        </columns>
+        <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+    </TableView>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Agendar Nueva Cita" onAction="#handleAgendarNuevaCita"/>
+        <Button fx:id="btnModificarCita" text="Modificar Cita Seleccionada" onAction="#handleModificarCita" disable="true"/>
+        <Button fx:id="btnCancelarCitaAdmin" text="Cancelar Cita Seleccionada" onAction="#handleCancelarCitaAdmin" disable="true"/>
+    </HBox>
+
+</VBox>

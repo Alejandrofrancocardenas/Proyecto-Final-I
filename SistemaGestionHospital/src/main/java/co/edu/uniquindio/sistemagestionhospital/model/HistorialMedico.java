@@ -1,74 +1,27 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HistorialMedico {
-    private LocalDate fecha;
-    private String diagnostico;
-    private String tratamiento;
-    private Medico medico;
-    private Paciente paciente;
-    private String descripcion;
+    private List<EntradaHistorial> entradas;
 
-    public HistorialMedico(String diagnostico, String tratamiento, Medico medico, Paciente paciente, String descripcion) {
-        this.diagnostico = diagnostico;
-        this.tratamiento = tratamiento;
-        this.medico = medico;
-        this.paciente = paciente;
-        this.descripcion = descripcion;
-        this.fecha = LocalDate.now();
+    public HistorialMedico() { // Constructor
+        this.entradas = new ArrayList<>();
     }
 
-    public LocalDate getFecha() {
-        return fecha;
+    public boolean agregarEntrada(LocalDate fecha, String diagnostico, String tratamiento) {
+        if (fecha == null || diagnostico == null || diagnostico.trim().isEmpty() || tratamiento == null || tratamiento.trim().isEmpty()) {
+            System.err.println("HistorialMedico: Datos inválidos para agregar entrada.");
+            return false;
+        }
+        EntradaHistorial nuevaEntrada = new EntradaHistorial(fecha, diagnostico, tratamiento);
+        return this.entradas.add(nuevaEntrada);
     }
 
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
+    public List<EntradaHistorial> getEntradas() {
+        return new ArrayList<>(entradas);
 
-    public Paciente getPaciente() {
-        return paciente;
-    }
-
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-    }
-
-    public Medico getMedico() {
-        return medico;
-    }
-
-    public void setMedico(Medico medico) {
-        this.medico = medico;
-    }
-
-    public String getDiagnostico() {
-        return diagnostico;
-    }
-
-    public String getTratamiento() {
-        return tratamiento;
-    }
-
-    public void setDiagnostico(String diagnostico) {
-        this.diagnostico = diagnostico;
-    }
-
-    public void setTratamiento(String tratamiento) {
-        this.tratamiento = tratamiento;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    @Override
-    public String toString() {
-        return "Fecha: " + fecha + ", Diagnostico: " + diagnostico + ", Tratamiento: " + tratamiento;
     }
 }

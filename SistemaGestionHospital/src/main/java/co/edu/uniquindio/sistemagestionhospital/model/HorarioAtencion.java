@@ -1,54 +1,67 @@
 package co.edu.uniquindio.sistemagestionhospital.model;
 
+import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
-public class HorarioAtencion {
-
-    private DayOfWeek dia;
+public class HorarioAtencion implements Serializable {
+    private String id;
+    private DayOfWeek diaSemana;
     private LocalTime horaInicio;
     private LocalTime horaFin;
-    private List<Sala> salas;
-    public HorarioAtencion(DayOfWeek dia, LocalTime horaInicio, LocalTime horaFin) {
-        this.dia = dia;
+
+    public HorarioAtencion(String id, DayOfWeek diaSemana, LocalTime horaInicio, LocalTime horaFin) {
+        this.id = id;
+        this.diaSemana = diaSemana;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
-        this.salas = new ArrayList<>();
-    }
-public List<Sala> getSala() {
-        return salas;
-}
-public void setSala(List<Sala> sala) {
-        this.salas = sala;
-}
-    public DayOfWeek getDia() {
-        return dia;
     }
 
-    public void setDia(DayOfWeek dia) {
-        this.dia = dia;
+    // Getters y Setters
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public DayOfWeek getDiaSemana() { // <-- Método getDiaSemana()
+        return diaSemana;
+    }
+
+    public void setDiaSemana(DayOfWeek diaSemana) {
+        this.diaSemana = diaSemana;
     }
 
     public LocalTime getHoraInicio() {
         return horaInicio;
     }
 
-    public void setHoraInicio(LocalTime horaInicio) {
-        this.horaInicio = horaInicio;
-    }
-
     public LocalTime getHoraFin() {
         return horaFin;
     }
 
-    public void setHoraFin(LocalTime horaFin) {
-        this.horaFin = horaFin;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HorarioAtencion that = (HorarioAtencion) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 
     @Override
     public String toString() {
-        return dia + ": " + horaInicio + " - " + horaFin;
+        return "HorarioAtencion{" +
+                "id='" + id + '\'' +
+                ", diaSemana='" + diaSemana + '\'' +
+                ", horaInicio=" + horaInicio +
+                ", horaFin=" + horaFin +
+                '}';
     }
 }

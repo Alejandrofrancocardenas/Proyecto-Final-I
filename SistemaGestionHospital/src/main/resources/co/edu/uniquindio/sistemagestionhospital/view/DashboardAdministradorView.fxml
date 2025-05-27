@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.AdministradorDashboardController"
+            prefHeight="600.0" prefWidth="800.0">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="Gestión">
+                    <MenuItem text="Gestionar Pacientes" onAction="#irAGestionPacientes"/>
+                    <MenuItem text="Gestionar Médicos" onAction="#irAGestionMedicos"/>
+                    <MenuItem text="Gestionar Citas" onAction="#irAGestionCitas"/>
+                    <MenuItem text="Gestionar Salas" onAction="#irAGestionSalas"/>
+                    <MenuItem text="Gestionar Horarios" onAction="#irAGestionHorariosMedicos"/>
+                </Menu>
+                <Menu text="Reportes">
+                    <MenuItem text="Ver Reporte de Citas" onAction="#verReporteCitas"/>
+                    <MenuItem text="Ver Estadísticas" onAction="#verEstadisticas"/>
+                </Menu>
+                <Menu text="Sistema">
+                    <MenuItem text="Configuración" onAction="#abrirConfiguracion"/>
+                    <MenuItem text="Cerrar Sesión" onAction="#cerrarSesion"/>
+                </Menu>
+            </MenuBar>
+            <Label text="Panel de Administrador" style="-fx-font-size: 18px; -fx-padding: 10;" alignment="CENTER" maxWidth="Infinity"/>
+        </VBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="contenedorPrincipalAdmin" BorderPane.alignment="CENTER">
+            <Label text="Seleccione una opción del menú para comenzar." style="-fx-font-size: 16px;"/>
+        </StackPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10; -fx-border-color: lightgray; -fx-border-width: 1 0 0 0;">
+            <Label fx:id="lblInfoUsuarioAdmin" text="Usuario: Administrador"/>
+            <Label fx:id="lblFechaHoraAdmin" text="Fecha y Hora"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

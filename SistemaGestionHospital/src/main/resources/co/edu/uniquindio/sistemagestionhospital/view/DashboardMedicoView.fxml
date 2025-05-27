@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.DashboardMedicoController"
+            prefHeight="600.0" prefWidth="900.0">
+
+    <top>
+        <VBox>
+            <MenuBar>
+                <Menu text="Mi Actividad">
+                    <MenuItem text="Ver Mis Citas Programadas" onAction="#verMisCitasProgramadas"/>
+                    <MenuItem text="Gestionar Mis Horarios" onAction="#gestionarMisHorarios"/>
+                </Menu>
+                <Menu text="Pacientes">
+                    <MenuItem text="Buscar Paciente y Ver Historial" onAction="#buscarPaciente"/>
+                </Menu>
+                <Menu text="Cuenta">
+                    <MenuItem text="Ver Mis Notificaciones" onAction="#verMisNotificaciones"/>
+                    <MenuItem text="Cerrar Sesión" onAction="#cerrarSesion"/>
+                </Menu>
+            </MenuBar>
+            <Label fx:id="lblBienvenidaMedico" text="Panel de Médico" style="-fx-font-size: 18px; -fx-padding: 10;" alignment="CENTER" maxWidth="Infinity"/>
+        </VBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="contenedorPrincipalMedico" BorderPane.alignment="CENTER">
+            <Label text="Seleccione una opción del menú para comenzar." style="-fx-font-size: 16px;"/>
+        </StackPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_RIGHT" spacing="10" style="-fx-padding: 10; -fx-border-color: lightgray; -fx-border-width: 1 0 0 0;">
+            <Label fx:id="lblInfoUsuarioMedico" text="Médico: [Nombre del Médico]"/>
+            <Label fx:id="lblFechaHoraMedico" text="Fecha y Hora"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

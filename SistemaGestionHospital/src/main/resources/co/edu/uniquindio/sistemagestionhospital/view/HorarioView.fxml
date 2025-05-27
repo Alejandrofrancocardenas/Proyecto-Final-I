@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.HorarioViewController" alignment="CENTER" prefWidth="400">
-    <Label text="Gestión de Horarios de Consulta" style="-fx-font-size: 18px; -fx-font-weight: bold"/>
-
-    <ListView fx:id="listaHorarios" prefHeight="150"/>
-
-    <HBox spacing="10">
-        <TextField fx:id="txtDia" promptText="Día (Ej: LUNES)"/>
-        <TextField fx:id="txtInicio" promptText="Hora Inicio (HH:mm)"/>
-        <TextField fx:id="txtFin" promptText="Hora Fin (HH:mm)"/>
-    </HBox>
+<VBox spacing="10" xmlns:fx="http://javafx.com/fxml" fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.HorarioViewController" alignment="CENTER" padding="20">
+    <Label text="Gestión de Horarios de Atención" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
 
     <HBox spacing="10">
-        <Button text="Agregar Horario" onAction="#agregarHorario"/>
-        <Button text="Eliminar Horario" onAction="#eliminarHorario"/>
+        <ComboBox fx:id="cbDia" prefWidth="150"/>
+        <TextField fx:id="txtHoraInicio" promptText="Hora Inicio (HH:mm)" />
+        <TextField fx:id="txtHoraFin" promptText="Hora Fin (HH:mm)" />
+        <Button text="Agregar" onAction="#agregarHorario"/>
     </HBox>
+
+    <ListView fx:id="listaHorarios" prefHeight="200" />
+
+    <Button text="Eliminar Horario Seleccionado" onAction="#eliminarHorario"/>
 </VBox>

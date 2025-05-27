@@ -1,21 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20" alignment="CENTER"
-      xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="co.edu.uniquindio.sistemagestionhospital.viewController.MainViewController"
-      stylesheets="@../style/style.css">
-
+<VBox fx:id="rootVBox" alignment="CENTER" spacing="20" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="co.edu.uniquindio.sistemagestionhospital.Controller.MainController"
+      prefWidth="500.0" prefHeight="450.0" style="-fx-background-color: #f4f4f4;">
     <padding>
-        <Insets top="40" right="20" bottom="40" left="20"/>
+        <Insets top="40" right="50" bottom="40" left="50"/>
     </padding>
 
-    <Button fx:id="btnPacientes" text="Gestionar Pacientes" onAction="#abrirGestionPacientes"/>
-    <Button fx:id="btnMedicos" text="Gestionar Médicos" onAction="#gestionarMedicos"/>
-    <Button fx:id="btnCerrarSesion" text="Cerrar Sesión" onAction="#cerrarSesion"/>
+    <Label text="Sistema de Gestión Hospitalaria"
+           style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #333333;"/>
+
+    <VBox alignment="CENTER" spacing="15" maxWidth="300">
+        <Button text="Panel de Administrador" onAction="#abrirVistaAdministrador"
+                prefWidth="Infinity" prefHeight="45"
+                style="-fx-font-size: 14px; -fx-background-color: #28a27f; -fx-text-fill: white;"/>
+
+        <Label text="Acceso Médico:" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10 0 0 0;"/>
+        <HBox spacing="10" alignment="CENTER_LEFT" maxWidth="Infinity">
+            <Label text="Seleccionar Médico:" minWidth="120"/>
+            <ComboBox fx:id="comboSeleccionarMedico" prefWidth="200" promptText="Elija un médico"/>
+        </HBox>
+        <Button text="Entrar como Médico" onAction="#abrirVistaMedico"
+                prefWidth="Infinity" prefHeight="45"
+                style="-fx-font-size: 14px; -fx-background-color: #27948a; -fx-text-fill: white;"/>
+
+        <Button text="Panel de Paciente" onAction="#abrirVistaPaciente"
+                prefWidth="Infinity" prefHeight="45"
+                style="-fx-font-size: 14px; -fx-background-color: #4dbd8f; -fx-text-fill: white;"/>
+
+        <Separator prefWidth="280" style="-fx-padding: 10 0 5 0;"/>
+
+        <Button text="Registrar Nuevo Paciente" onAction="#abrirRegistroPacienteView"
+                prefWidth="Infinity" prefHeight="45"
+                style="-fx-font-size: 14px; -fx-background-color: #4395e8; -fx-text-fill: white;"/>
+    </VBox>
 
 </VBox>

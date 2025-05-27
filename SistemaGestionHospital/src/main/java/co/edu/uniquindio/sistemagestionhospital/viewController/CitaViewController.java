@@ -1,20 +1,19 @@
 package co.edu.uniquindio.sistemagestionhospital.viewController;
 
+import co.edu.uniquindio.sistemagestionhospital.Controller.HospitalController;
 import co.edu.uniquindio.sistemagestionhospital.model.*;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.StringConverter;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.ResourceBundle;
+import java.time.format.DateTimeParseException;
+import java.util.*;
 
 public class CitaViewController implements Initializable {
 
@@ -32,7 +31,12 @@ public class CitaViewController implements Initializable {
 
     @FXML
     private ListView<Cita> listaCitas;
+    @FXML
+    private TextField txtMotivo;
 
+    @FXML
+    private TextField txtEspecialidad;
+    
     private final Hospital hospital = Hospital.getInstance();
     private Paciente paciente;
     private Medico medicoActual;
@@ -78,57 +82,169 @@ public class CitaViewController implements Initializable {
         cbPaciente.setItems(FXCollections.observableArrayList(hospital.getListaPacientes()));
         cbMedico.setItems(FXCollections.observableArrayList(hospital.getListaMedicos()));
     }
-
     private void actualizarListaCitas() {
-        listaCitas.getItems().clear();
-        if (paciente != null) {
-            paciente.getCitas().stream()
-                    .sorted(Comparator.comparing(Cita::getFecha).thenComparing(Cita::getHora))
-                    .forEach(listaCitas.getItems()::add);
-        }
-    }
 
-    @FXML
-    private void agendarCita() {
-        Medico medico = cbMedico.getValue();
-        String fechaTexto = txtFecha.getText();
-        String horaTexto = txtHora.getText();
-
-        if (paciente == null || medico == null || fechaTexto.isBlank() || horaTexto.isBlank()) {
-            mostrarMensaje("Completa todos los campos y selecciona un paciente.", true);
+        if (listaCitas == null) {
+            System.err.println("Error: listaCitas no está inicializada.");
             return;
         }
+        listaCitas.getItems().clear();
+
+        if (paciente != null) {
+            List<Cita> citasDelPaciente = paciente.getCitasProgramadas(); // <<< CAMBIO AQUÍ
+
+            if (citasDelPaciente != null) {
+                citasDelPaciente.stream()
+                        .filter(Objects::nonNull)
+                        .sorted(Comparator.comparing(Cita::getFecha, Comparator.nullsLast(Comparator.naturalOrder()))
+                                .thenComparing(Cita::getHora, Comparator.nullsLast(Comparator.naturalOrder())))
+                        .forEach(listaCitas.getItems()::add);
+            }
+        }
+    }
+    @FXML
+    private void agendarCita() {
+
+        Medico medicoSeleccionado = cbMedico.getValue();
+        String fechaTexto = txtFecha.getText();
+        String horaTexto = txtHora.getText();
+        String motivo = txtMotivo.getText();
+        String especialidad = txtEspecialidad.getText();
+
+        if (paciente == null) {
+            mostrarMensaje("No hay un paciente seleccionado para agendar la cita.", true);
+            return;
+        }
+        if (medicoSeleccionado == null) {
+            mostrarMensaje("Por favor, seleccione un médico.", true);
+            return;
+        }
+        if (fechaTexto.isBlank() || horaTexto.isBlank() || motivo.isBlank()) {
+            // Considera si la especialidad puede ser opcional o si se obtiene del médico
+            mostrarMensaje("Por favor, complete todos los campos obligatorios: fecha, hora y motivo.", true);
+            return;
+        }
+
 
         try {
             LocalDate fecha = LocalDate.parse(fechaTexto);
             LocalTime hora = LocalTime.parse(horaTexto);
 
-            Cita nuevaCita = new Cita(paciente, medico, fecha, hora);
+
+            String idCita = "CITA-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+            EstadoCita estadoInicial = EstadoCita.AGENDADA;
+
+            Cita nuevaCita = new Cita(
+                    idCita,
+                    fecha,
+                    hora,
+                    motivo,
+                    paciente,
+                    medicoSeleccionado,
+                    especialidad,
+                    estadoInicial
+            );
             if (paciente.agregarCita(nuevaCita)) {
-                mostrarMensaje("Cita agendada exitosamente.", false);
+
+                mostrarMensaje("Cita agendada exitosamente con ID: " + nuevaCita.getId(), false);
                 actualizarListaCitas();
+                limpiarCamposDeCita();
             } else {
-                mostrarMensaje("Ya existe una cita en ese horario.", true);
+
+                mostrarMensaje("No se pudo agregar la cita a la lista del paciente (posible duplicado para este paciente).", true);
             }
+        } catch (DateTimeParseException e) {
+            mostrarMensaje("Formato incorrecto de fecha u hora. Use AAAA-MM-DD y HH:mm", true);
         } catch (Exception e) {
-            mostrarMensaje("Formato incorrecto de fecha u hora. Usa yyyy-MM-dd y HH:mm", true);
+            mostrarMensaje("Ocurrió un error inesperado al agendar la cita: " + e.getMessage(), true);
+            e.printStackTrace();
         }
     }
+    private void limpiarCamposDeCita() {
 
-    @FXML
-    private void cancelarCita() {
-        Cita seleccionada = listaCitas.getSelectionModel().getSelectedItem();
-        if (seleccionada != null && paciente != null) {
-            paciente.cancelarCita(seleccionada);
-            actualizarListaCitas();
-        }
+        txtFecha.clear();
+        txtHora.clear();
+        txtMotivo.clear();
+        txtEspecialidad.clear();
+        txtFecha.requestFocus();
     }
 
-    private void mostrarMensaje(String mensaje, boolean esError) {
+
+
+
+        private Paciente pacienteActual;
+        private Cita citaActualOSeleccionada;
+        private HospitalController hospitalController;
+
+
+        public void initData(Paciente paciente, Cita cita) {
+            this.pacienteActual = paciente;
+            this.citaActualOSeleccionada = cita;
+            this.hospitalController = HospitalController.getInstance();
+
+        }
+
+        @FXML
+        private void handleCancelarCitaAction(ActionEvent event) {
+            if (pacienteActual == null) {
+                mostrarAlerta("Error: No se ha identificado al paciente.", Alert.AlertType.ERROR);
+                return;
+            }
+            if (citaActualOSeleccionada == null) {
+                mostrarAlerta("Error: No hay una cita seleccionada para cancelar.", Alert.AlertType.ERROR);
+                return;
+            }
+            if (citaActualOSeleccionada.getId() == null) {
+                mostrarAlerta("Error: La cita no tiene un ID válido para cancelar.", Alert.AlertType.ERROR);
+                return;
+            }
+
+            // Lógica de confirmación (opcional pero recomendada)
+            Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmacion.setTitle("Confirmar Cancelación");
+            confirmacion.setHeaderText("¿Está seguro de que desea cancelar esta cita?");
+            confirmacion.setContentText("Cita ID: " + citaActualOSeleccionada.getId() +
+                    "\nFecha: " + citaActualOSeleccionada.getFecha() +
+                    "\nHora: " + citaActualOSeleccionada.getHora());
+
+            Optional<ButtonType> resultado = confirmacion.showAndWait();
+            if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+
+
+                boolean canceladaPorPaciente = pacienteActual.cancelarCita(citaActualOSeleccionada.getId());
+
+
+                if (canceladaPorPaciente) {
+
+
+                    if (hospitalController.cancelarCitaYNotificar(citaActualOSeleccionada.getId())) {
+                        mostrarAlerta("Cita cancelada exitosamente y sistema notificado.", Alert.AlertType.INFORMATION);
+
+                    } else {
+                        mostrarAlerta("Cita cancelada de su lista, pero hubo un problema al procesar la cancelación en el sistema.", Alert.AlertType.WARNING);
+                    }
+
+                } else {
+                    mostrarAlerta("No se pudo cancelar la cita de su lista (posiblemente ya no existía o el estado no lo permitía).", Alert.AlertType.ERROR);
+                }
+            }
+        }
+        private void mostrarAlerta(String mensaje, Alert.AlertType tipo) {
+            Alert alert = new Alert(tipo);
+            alert.setTitle(tipo.toString());
+            alert.setHeaderText(null);
+            alert.setContentText(mensaje);
+            alert.showAndWait();
+        }
+
+        private void mostrarMensaje(String mensaje, boolean esError) {
         Alert alert = new Alert(esError ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION);
+        alert.setTitle(esError ? "Error" : "Información");
+        alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
+
 
     public void setMedico(Medico medico) {
         this.medicoActual = medico;

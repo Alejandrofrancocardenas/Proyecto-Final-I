@@ -1,50 +1,82 @@
 package co.edu.uniquindio.sistemagestionhospital.viewController;
 
 import co.edu.uniquindio.sistemagestionhospital.model.Cita;
+import co.edu.uniquindio.sistemagestionhospital.model.EstadoCita;
 import co.edu.uniquindio.sistemagestionhospital.model.Medico;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.util.List;
 
 public class DiagnosticoViewController {
 
     @FXML
-    private ListView<Cita> listaCitas;
+    private ComboBox<Cita> comboCitas;
 
     @FXML
     private TextArea txtDiagnostico, txtTratamiento;
+
+    @FXML
+    private Label lblMensaje;
 
     private Medico medico;
 
     public void setMedico(Medico medico) {
         this.medico = medico;
-        listaCitas.getItems().setAll(medico.getCitas());
+        cargarCitasPendientes();
     }
 
+    private void cargarCitasPendientes() {
+
+        if (medico == null || comboCitas == null) {
+
+            System.err.println("Error: Médico o ComboBox no inicializado en cargarCitasPendientes.");
+            return;
+        }
+
+        comboCitas.getItems().clear();
+        List<Cita> citasDelMedico = medico.getCitas();
+
+        if (citasDelMedico != null) {
+            for (Cita cita : citasDelMedico) {
+                if (cita != null && cita.getEstado() != null) {
+                    if (cita.getEstado().equals(EstadoCita.AGENDADA)) {
+                        comboCitas.getItems().add(cita);
+                    }
+                }
+            }
+        }
+    }
     @FXML
-    private void guardarDiagnosticoTratamiento() {
-        Cita citaSeleccionada = listaCitas.getSelectionModel().getSelectedItem();
+    private void registrarDiagnostico() {
+        Cita citaSeleccionada = comboCitas.getValue();
         String diagnostico = txtDiagnostico.getText();
         String tratamiento = txtTratamiento.getText();
 
         if (citaSeleccionada == null || diagnostico.isBlank() || tratamiento.isBlank()) {
-            mostrarMensaje("Completa todos los campos y selecciona una cita.", true);
+            lblMensaje.setText(" Todos los campos son obligatorios.");
+            lblMensaje.setTextFill(javafx.scene.paint.Color.RED);
             return;
         }
 
-        boolean exito = medico.registrarDiagnosticoYTratamiento(citaSeleccionada, diagnostico, tratamiento);
+        boolean exito = medico.agregarEntradaHistorial(citaSeleccionada, diagnostico, tratamiento);
 
         if (exito) {
-            mostrarMensaje("Diagnóstico y tratamiento registrados correctamente.", false);
+            lblMensaje.setText(" Diagnóstico registrado correctamente.");
+            lblMensaje.setTextFill(javafx.scene.paint.Color.GREEN);
+            cargarCitasPendientes();
             txtDiagnostico.clear();
             txtTratamiento.clear();
         } else {
-            mostrarMensaje("No se pudo registrar. Verifica que la cita pertenezca al médico.", true);
+            lblMensaje.setText(" Error al registrar diagnóstico.");
+            lblMensaje.setTextFill(javafx.scene.paint.Color.RED);
         }
     }
 
-    private void mostrarMensaje(String mensaje, boolean error) {
-        Alert alert = new Alert(error ? Alert.AlertType.ERROR : Alert.AlertType.INFORMATION);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+    @FXML
+    private void cerrarVentana() {
+        Stage stage = (Stage) txtDiagnostico.getScene().getWindow();
+        stage.close();
     }
 }
